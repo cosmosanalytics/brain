@@ -5,7 +5,7 @@ from itertools import permutations
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 st.title('Brain Network')
 
 @st.cache
@@ -74,13 +74,16 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-matrix, colorlist, colornumbs, lineList, sublist = loadData()
-Nodes = st.multiselect('Select Node(s)', lineList)
-Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
-threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
-G = defineG(matrix, threshold, Nodes, Links)
-# closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
-brainNX(G, colorlist, colornumbs, lineList, sublist)
+col1, col2 = st.columns(2)
+with col1:
+    matrix, colorlist, colornumbs, lineList, sublist = loadData()
+    Nodes = st.multiselect('Select Node(s)', lineList)
+    Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
+    threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
+with col2:    
+    G = defineG(matrix, threshold, Nodes, Links)
+    # closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
+    brainNX(G, colorlist, colornumbs, lineList, sublist)
 
 
 
