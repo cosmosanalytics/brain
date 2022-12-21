@@ -59,7 +59,14 @@ def centrality_calc(G):
     
     return normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering
 
-def brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist):
+def brainNX(G, colorlist, colornumbs, lineList, sublist):
+    strength = G.degree(weight='weight')
+    strengths = {node: val for (node, val) in strength}
+    nx.set_node_attributes(G, dict(strength), 'strength') # Add as nodal attribute
+    normstrenghts = {node: val * 1/(len(G.nodes)-1) for (node, val) in strength}
+    nx.set_node_attributes(G, normstrenghts, 'strengthnorm') # Add as nodal attribute
+    normstrengthlist = np.array([val * 1/(len(G.nodes)-1) for (node, val) in strength])    
+    
     def Convert(lst): 
         res_dct = {i : lst[i] for i in range(0, len(lst))} 
         return res_dct
@@ -69,7 +76,7 @@ def brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist):
     nx.set_node_attributes(G, Convert(sublist), 'subnet')
     nx.set_node_attributes(G, Convert(colornumbs), 'colornumb')
 
-    plt.figure(figsize=(20,20))
+    fig, ax = plt.subplots(figsize=(20,20))
     edgewidth = [ d['weight'] for (u,v,d) in G.edges(data=True)]
     pos = nx.spring_layout(G, scale=5)
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
@@ -83,8 +90,8 @@ Nodes = st.multiselect('Select Node(s)', lineList)
 Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
 threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
-normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
-brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist)
+# closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
+brainNX(G, colorlist, colornumbs, lineList, sublist)
 # fig, ax = plt.subplots()
 # pos = nx.kamada_kawai_layout(G)
 # nx.draw(G,pos, with_labels=True)
