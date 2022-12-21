@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from itertools import permutations 
 
 st.title('Brain Network')
 
@@ -17,6 +18,8 @@ def loadData():
     return matrix, colorlist, colornumbs, lineList, sublist
 
 matrix, colorlist, colornumbs, lineList, sublist = loadData()
+Nodes = st.multiselect('Select Node(s)', lineList)
+Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
 st.write(matrix)
 st.write(colorlist)
 
