@@ -73,6 +73,7 @@ def brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist):
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
 
+
     
 matrix, colorlist, colornumbs, lineList, sublist = loadData()
 Nodes = st.multiselect('Select Node(s)', lineList)
@@ -81,12 +82,12 @@ threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
 normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
 # brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist)
-st.write(normstrengthlist)
-st.write(closeness)
-st.write(betweenness)
-st.write(eigen)
-st.write(pagerank)
-st.write(clustering)
+fig, ax = plt.subplots()
+pos = nx.kamada_kawai_layout(G)
+nx.draw(G,pos, with_labels=True)
+st.pyplot(fig)
+st.balloons()
+
 
 
 
