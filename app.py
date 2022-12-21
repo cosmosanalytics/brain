@@ -30,7 +30,7 @@ def defineG(matrix, threshold, Nodes, Links):
 matrix, colorlist, colornumbs, lineList, sublist = loadData()
 Nodes = st.multiselect('Select Node(s)', lineList)
 Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
-threshold = st.slider('Threshold', 0.0, 1.0, 0)
+threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 
 
 
