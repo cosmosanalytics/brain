@@ -79,7 +79,8 @@ Nodes = st.multiselect('Select Node(s)', lineList)
 Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
 threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
-
+normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
+brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist)
 
 
 
