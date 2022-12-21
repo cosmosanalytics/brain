@@ -5,7 +5,7 @@ from itertools import permutations
 import networkx as nx
 import matplotlib.pyplot as plt
 
-st.set_page_config(layout="wide")
+# st.set_page_config(layout="wide")
 st.title('Brain Network')
 
 @st.cache
@@ -31,14 +31,6 @@ def defineG(matrix, threshold, Nodes, Links):
     return G
 
 def centrality_calc(G):
-    strength = G.degree(weight='weight')
-    strengths = {node: val for (node, val) in strength}
-    nx.set_node_attributes(G, dict(strength), 'strength') # Add as nodal attribute
-    normstrenghts = {node: val * 1/(len(G.nodes)-1) for (node, val) in strength}
-    nx.set_node_attributes(G, normstrenghts, 'strengthnorm') # Add as nodal attribute
-    normstrengthlist = np.array([val * 1/(len(G.nodes)-1) for (node, val) in strength])
-    mean_degree = np.sum(normstrengthlist)/len(G.nodes)
-    
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
     closeness = nx.closeness_centrality(G, distance='distance')
@@ -56,8 +48,7 @@ def centrality_calc(G):
     clustering = nx.clustering(G, weight='weight')
     nx.set_node_attributes(G, clustering, 'cc')
     mean_clutering = nx.average_clustering(G, weight='weight')
-    
-    return normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering
+    return closeness, betweenness, eigen, pagerank, clustering, mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
@@ -83,8 +74,6 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-
-    
 matrix, colorlist, colornumbs, lineList, sublist = loadData()
 Nodes = st.multiselect('Select Node(s)', lineList)
 Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
@@ -92,9 +81,7 @@ threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
 # closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
 brainNX(G, colorlist, colornumbs, lineList, sublist)
-# fig, ax = plt.subplots()
-# pos = nx.kamada_kawai_layout(G)
-# nx.draw(G,pos, with_labels=True)
+
 
 
 
