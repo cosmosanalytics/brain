@@ -5,6 +5,7 @@ from itertools import permutations
 import networkx as nx
 import matplotlib.pyplot as plt
 
+st.set_page_config(layout="wide")
 st.title('Brain Network')
 
 @st.cache
@@ -73,6 +74,7 @@ def brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist):
     pos = nx.spring_layout(G, scale=5)
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
+    st.pyplot(fig)
 
 
     
@@ -83,11 +85,11 @@ threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
 normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
 # brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist)
-fig, ax = plt.subplots()
-pos = nx.kamada_kawai_layout(G)
-nx.draw(G,pos, with_labels=True)
-st.pyplot(fig)
-st.balloons()
+# fig, ax = plt.subplots()
+# pos = nx.kamada_kawai_layout(G)
+# nx.draw(G,pos, with_labels=True)
+
+
 
 
 
