@@ -17,9 +17,22 @@ def loadData():
     matrix.index = lineList
     return matrix, colorlist, colornumbs, lineList, sublist
 
+def defineG(matrix, threshold, Nodes, Links):
+    matrix = abs(matrix); matrix[matrix<=threshold] = 0    
+    matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
+    for i in Links: matrix.loc[i]=0   
+    print(matrix)
+
+    G = nx.from_numpy_matrix(np.array(matrix))
+    G.remove_edges_from(list(nx.selfloop_edges(G)))
+    return G
+
 matrix, colorlist, colornumbs, lineList, sublist = loadData()
 Nodes = st.multiselect('Select Node(s)', lineList)
 Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
-st.write(matrix)
-st.write(colorlist)
+threshold = st.slider('Threshold', 0, 1, 0)
+
+
+
+
 
