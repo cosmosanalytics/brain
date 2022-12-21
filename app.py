@@ -81,7 +81,12 @@ threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
 G = defineG(matrix, threshold, Nodes, Links)
 normstrengthlist, mean_degree, closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
 # brainNX(G, normstrengthlist, colorlist, colornumbs, lineList, sublist)
-
+st.write(normstrengthlist)
+st.write(closeness)
+st.write(betweenness)
+st.write(eigen)
+st.write(pagerank)
+st.write(clustering)
 
 
 
