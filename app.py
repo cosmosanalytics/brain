@@ -16,5 +16,6 @@ def loadData():
 #     matrix.index = lineList
     
     return matrix#, colorlist, colornumbs, lineList, sublist
-
+matrix = loadData()
+st.write(matrix)
 
