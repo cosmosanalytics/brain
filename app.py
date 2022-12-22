@@ -33,14 +33,13 @@ def defineG(matrix, threshold, Nodes, Links):
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
-    closeness = nx.closeness_centrality(G, distance='distance')
-    betweenness = nx.betweenness_centrality(G, weight='distance', normalized=True) 
+    closeness = pd.Series(nx.closeness_centrality(G, distance='distance')); closeness.index = lineList
+    betweenness = pd.Series(nx.betweenness_centrality(G, weight='distance', normalized=True)); betweenness.index = lineList 
     eigen = nx.eigenvector_centrality(G, weight='weight')
     pagerank = nx.pagerank(G, weight='weight')
     clustering = nx.clustering(G, weight='weight')
     mean_clutering = nx.average_clustering(G, weight='weight')
-    return list(closeness), pd.Series(betweenness,index=lineList), pd.Series(eigen,index=lineList), pd.Series(pagerank,index=lineList), \
-            pd.Series(clustering,index=lineList), mean_clutering
+    return closeness, betweenness, eigen, pagerank, clustering, mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
@@ -75,7 +74,6 @@ with col1:
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G,lineList)   
     st.write(closeness)
-    st.write(mean_clustering)
 with col2:    
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
