@@ -15,7 +15,7 @@ def loadData():
     colornumbs = pd.read_csv('colornumbs.csv', index_col = 0)['0']
     lineList = pd.read_csv('lineList.csv', index_col = 0)['0']
     sublist = pd.read_csv('sublist.csv', index_col = 0)['0'] 
-    refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist}).groupby(['sublist','colorlist'])[['lineList']].apply(list)
+    refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist}).groupby(['sublist','colorlist'])[['lineList']].apply(list, axis=1)
     
     matrix.columns = lineList
     matrix.index = lineList
@@ -75,5 +75,5 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
-    st.write(refDF)
+    st.write(refDF.T)
     brainNX(G, colorlist, colornumbs, lineList, sublist)
