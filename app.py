@@ -64,6 +64,10 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
+    
+    fig, ax = plt.subplots(figsize=(20,3))
+    G1 = nx.from_pandas_edgelist(pd.DataFrame({'lineList':lineList, 'sublist':sublist}), 'lineList', 'sublist')
+    st.pyplot(fig)
 
 col1, col2 = st.columns(2)
 with col1:
