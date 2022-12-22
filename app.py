@@ -66,6 +66,7 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
 with col1:
+    Region = st.multiselect('Select Region(s) to Remove', sublist.unique())
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
