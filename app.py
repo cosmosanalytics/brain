@@ -15,10 +15,11 @@ def loadData():
     colornumbs = pd.read_csv('colornumbs.csv', index_col = 0)['0']
     lineList = pd.read_csv('lineList.csv', index_col = 0)['0']
     sublist = pd.read_csv('sublist.csv', index_col = 0)['0'] 
+    refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist}).groupby(['sublist','colorlist'])[['lineList']].apply(list)
     
     matrix.columns = lineList
     matrix.index = lineList
-    return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist)
+    return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
 def defineG(matrix, threshold, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0    
@@ -64,7 +65,7 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
 
 col1, col2 = st.columns(2)
 with col1:
-    matrix, colorlist, colornumbs, lineList, sublist = loadData()
+    matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
     Nodes = st.multiselect('Select Node(s)', lineList)
     Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
@@ -74,4 +75,5 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
+    st.write(refDF)
     brainNX(G, colorlist, colornumbs, lineList, sublist)
