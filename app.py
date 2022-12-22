@@ -21,7 +21,7 @@ def loadData():
     matrix.columns = lineList
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
-
+@st.cache
 def defineG(matrix, threshold, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0    
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
@@ -30,7 +30,7 @@ def defineG(matrix, threshold, Nodes, Links):
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G
-
+@st.cache
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
@@ -39,7 +39,7 @@ def centrality_calc(G, lineList):
     clustering = pd.Series(nx.clustering(G, weight='weight')); clustering.index = lineList 
     mean_clutering = nx.average_clustering(G, weight='weight') 
     return closeness, betweenness, clustering, mean_clutering
-
+@st.cache
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
     strengths = {node: val for (node, val) in strength}
@@ -69,7 +69,7 @@ with col1:
     matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
-    threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
+    threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)   
     fig, ax = plt.subplots(figsize=(20, 3)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
