@@ -15,7 +15,7 @@ def loadData():
     colornumbs = pd.read_csv('colornumbs.csv', index_col = 0)['0']
     lineList = pd.read_csv('lineList.csv', index_col = 0)['0']
     sublist = pd.read_csv('sublist.csv', index_col = 0)['0'] 
-    refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist}).groupby(['sublist','colorlist'])[['lineList']].list()
+    refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist}).groupby(['sublist','colorlist'])['lineList'].list()
     
     matrix.columns = lineList
     matrix.index = lineList
