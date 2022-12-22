@@ -22,7 +22,6 @@ def loadData():
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
 def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
-    st.write(Regions_Nodes)
     matrix = abs(matrix); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns.isin(Regions_Nodes)] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
@@ -69,7 +68,8 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
-    Regions_Nodes = list(refDF[refDF['sublist'].isin(Regions)]['lineList'])
+    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values()
+    st.write(Regions_Nodes)
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
