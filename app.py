@@ -22,7 +22,6 @@ def loadData():
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
-@st.cache
 def defineG(matrix, threshold, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0    
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
@@ -32,7 +31,6 @@ def defineG(matrix, threshold, Nodes, Links):
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G
 
-@st.cache
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
@@ -42,7 +40,6 @@ def centrality_calc(G, lineList):
     mean_clutering = nx.average_clustering(G, weight='weight') 
     return closeness, betweenness, clustering, mean_clutering
 
-@st.cache
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
     strengths = {node: val for (node, val) in strength}
