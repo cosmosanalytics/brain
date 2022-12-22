@@ -64,11 +64,6 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
     st.pyplot(fig)
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
-def color_colorlist(val):
-    color = val
-    return f'background-color: {color}'
-# st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']),width=40)   
-st.dataframe(refDF.style.set_properties(subset=['colorlist'], **{'width': '300px'}),width=40)
 col1, col2 = st.columns(2)
 with col1:
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
@@ -80,6 +75,10 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 2)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 2)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
+    def color_colorlist(val):
+        color = val
+        return f'background-color: {color}'
+    st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']),width=40)       
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
     
