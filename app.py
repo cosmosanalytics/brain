@@ -75,8 +75,10 @@ with col1:
     closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G,lineList)   
     fig, ax = plt.subplots(figsize=(20, 3)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
-    fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering); st.pyplot(fig) 
-with col2:    
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = eigen.sort_values(ascending=False).plot.bar(); ax.set_title('Eigen'); st.pyplot(fig)
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = pagerank.sort_values(ascending=False).plot.bar(); ax.set_title('Pagerank'); st.pyplot(fig) 
+with col2:   
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig) 
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
 
