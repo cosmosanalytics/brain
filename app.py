@@ -16,7 +16,7 @@ def loadData():
     lineList = pd.read_csv('lineList.csv', index_col = 0)['0']
     sublist = pd.read_csv('sublist.csv', index_col = 0)['0'] 
     refDF = pd.DataFrame({'colorlist':colorlist, 'lineList':lineList, 'sublist':sublist})
-#     .groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
+            .groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
 
     matrix.columns = lineList
     matrix.index = lineList
@@ -64,22 +64,22 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
 
+matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
+def color_colorlist(val):
+    color = val
+    return f'background-color: {color}'
+st.dataframe(refDF[refDF['lineList'].isin(nds)].style.applymap(color_colorlist, subset=['colorlist']))    
 col1, col2 = st.columns(2)
 with col1:
-    matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)   
-    fig, ax = plt.subplots(figsize=(20, 3)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
-    fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
-    fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
+    fig, ax = plt.subplots(figsize=(20, 2)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
+    fig, ax = plt.subplots(figsize=(20, 2)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
+    fig, ax = plt.subplots(figsize=(20, 2)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
     brainNX(G, colorlist, colornumbs, lineList, sublist)
-    nds = st.multiselect('Select Node(s) to Locate Subnet/Color', lineList)
-    def color_colorlist(val):
-        color = val
-        return f'background-color: {color}'
-    st.dataframe(refDF[refDF['lineList'].isin(nds)].style.applymap(color_colorlist, subset=['colorlist']))
+
     
