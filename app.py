@@ -71,14 +71,14 @@ with col1:
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)   
-    fig, ax = plt.subplots(figsize=(20, 2)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
-    fig, ax = plt.subplots(figsize=(20, 2)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
-    fig, ax = plt.subplots(figsize=(20, 2)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
     def color_colorlist(val):
         color = val
         return f'background-color: {color}'
-    st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']),width=40)       
+    st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']))       
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
     
