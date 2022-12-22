@@ -76,7 +76,7 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
-    nds = st.multiselect('Select Node(s)', lineList)
+    nds = st.multiselect('Select Node(s)', ref['lineList'])
     def color_colorlist(val):
         color = val
         return f'background-color: {color}'
