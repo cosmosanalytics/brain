@@ -25,8 +25,10 @@ def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
-    for i in Links: matrix.loc[i]=0   
-
+    for i in Links: 
+        matrix.loc[i]=0   
+    if st.checkbox('Show matrix'):
+        st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G
