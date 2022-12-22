@@ -67,7 +67,7 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 def color_colorlist(val):
     color = val
     return f'background-color: {color}'
-st.dataframe(refDF[refDF['lineList'].isin(nds)].style.applymap(color_colorlist, subset=['colorlist']))    
+st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']))    
 col1, col2 = st.columns(2)
 with col1:
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
