@@ -73,7 +73,7 @@ with col1:
     Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
-    closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)   
+    closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G,lineList)   
     st.write(closeness)
     st.write(mean_clustering)
 with col2:    
