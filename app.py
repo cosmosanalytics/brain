@@ -30,25 +30,17 @@ def defineG(matrix, threshold, Nodes, Links):
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G
 
-def centrality_calc(G):
+def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
     closeness = nx.closeness_centrality(G, distance='distance')
-    nx.set_node_attributes(G, closeness, 'closecent')
-
     betweenness = nx.betweenness_centrality(G, weight='distance', normalized=True) 
-    nx.set_node_attributes(G, betweenness, 'bc')
-
     eigen = nx.eigenvector_centrality(G, weight='weight')
-    nx.set_node_attributes(G, eigen, 'eigen')
-        
     pagerank = nx.pagerank(G, weight='weight')
-    nx.set_node_attributes(G, pagerank, 'pg')
-
     clustering = nx.clustering(G, weight='weight')
-    nx.set_node_attributes(G, clustering, 'cc')
     mean_clutering = nx.average_clustering(G, weight='weight')
-    return closeness, betweenness, eigen, pagerank, clustering, mean_clutering
+    return pd.Series(closeness,index=lineList), pd.Series(betweenness,index=lineList), pd.Series(eigen,index=lineList), pd.Series(pagerank,index=lineList), \
+            pd.Series(clustering,index=lineList), mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
@@ -80,9 +72,11 @@ with col1:
     Nodes = st.multiselect('Select Node(s)', lineList)
     Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
-with col2:    
     G = defineG(matrix, threshold, Nodes, Links)
-    # closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)
+    closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G)   
+    st.write(closeness)
+    st.write(mean_clustering)
+with col2:    
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
 
