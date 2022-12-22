@@ -73,7 +73,7 @@ with col1:
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G,lineList)   
-    fig, ax = plt.subplots(figsize=(20, 3)); closeness.sort_values(ascending=False).plot.bar(); st.pyplot(fig)  
+    fig, ax = plt.subplots(figsize=(20, 3)); ax = closeness.sort_values(ascending=False).plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)  
 with col2:    
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
