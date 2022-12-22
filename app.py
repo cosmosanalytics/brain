@@ -68,7 +68,7 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
-    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values()
+    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     st.write(Regions_Nodes)
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
