@@ -22,6 +22,7 @@ def loadData():
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
+@st.cache
 def defineG(matrix, threshold, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0    
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
@@ -31,6 +32,7 @@ def defineG(matrix, threshold, Nodes, Links):
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G
 
+@st.cache
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
@@ -40,6 +42,7 @@ def centrality_calc(G, lineList):
     mean_clutering = nx.average_clustering(G, weight='weight') 
     return closeness, betweenness, clustering, mean_clutering
 
+@st.cache
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
     strengths = {node: val for (node, val) in strength}
@@ -76,9 +79,9 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
-    nds = st.multiselect('Select Node(s)', ref['lineList'])
+    nds = st.multiselect('Select Node(s)', refDF['lineList'])
     def color_colorlist(val):
         color = val
         return f'background-color: {color}'
-    st.dataframe(refDF[ref['lineList'].isin(nds)].style.applymap(color_colorlist, subset=['colorlist']))
+    st.dataframe(refDF[refDF['lineList'].isin(nds)].style.applymap(color_colorlist, subset=['colorlist']))
     brainNX(G, colorlist, colornumbs, lineList, sublist)
