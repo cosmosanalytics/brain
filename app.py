@@ -11,14 +11,14 @@ st.title('Brain Network')
 @st.cache
 def loadData():
     matrix = pd.read_csv('matrix.csv', index_col = 0)
-    colorlist = np.array(pd.read_csv('colorlist.csv', index_col = 0)['0'])
-    colornumbs = np.array(pd.read_csv('colornumbs.csv', index_col = 0)['0'])
-    lineList = np.array(pd.read_csv('lineList.csv', index_col = 0)['0'])
-    sublist = np.array(pd.read_csv('sublist.csv', index_col = 0)['0']) 
+    colorlist = pd.read_csv('colorlist.csv', index_col = 0)['0']
+    colornumbs = pd.read_csv('colornumbs.csv', index_col = 0)['0']
+    lineList = pd.read_csv('lineList.csv', index_col = 0)['0']
+    sublist = pd.read_csv('sublist.csv', index_col = 0)['0'] 
     
     matrix.columns = lineList
     matrix.index = lineList
-    return matrix, colorlist, colornumbs, lineList, sublist
+    return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist)
 
 def defineG(matrix, threshold, Nodes, Links):
     matrix = abs(matrix); matrix[matrix<=threshold] = 0    
