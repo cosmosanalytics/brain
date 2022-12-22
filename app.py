@@ -78,6 +78,6 @@ with col1:
 with col2:   
     def color_colorlist(val):
         color = val
-    return f'background-color: {color}'
+        return f'background-color: {color}'
     st.dataframe(refDF.style.applymap(color_colorlist, subset=['colorlist']))
     brainNX(G, colorlist, colornumbs, lineList, sublist)
