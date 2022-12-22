@@ -70,8 +70,8 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
 col1, col2 = st.columns(2)
 with col1:
     matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
-    Nodes = st.multiselect('Select Node(s)', lineList)
-    Links = st.multiselect('Select Link(s)', list(permutations(lineList, 2)))
+    Nodes = st.multiselect('Select Node(s) to Remove', lineList)
+    Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)   
@@ -79,7 +79,7 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 3)); ax = betweenness.sort_values(ascending=False).plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 3)); ax = clustering.sort_values(ascending=False).plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
-    nds = st.multiselect('Select Node(s)', refDF['lineList'])
+    nds = st.multiselect('Select Node(s) to Locate Subnet/Color', lineList)
     def color_colorlist(val):
         color = val
         return f'background-color: {color}'
