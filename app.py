@@ -38,7 +38,7 @@ def centrality_calc(G, lineList):
     eigen = pd.Series(nx.eigenvector_centrality(G, weight='weight')); eigen.index = lineList 
     pagerank = pd.Series(nx.pagerank(G, weight='weight')); pagerank.index = lineList 
     clustering = pd.Series(nx.clustering(G, weight='weight')); clustering.index = lineList 
-    mean_clutering = nx.average_clustering(G, weight='weight')); 
+    mean_clutering = nx.average_clustering(G, weight='weight') 
     return closeness, betweenness, eigen, pagerank, clustering, mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
