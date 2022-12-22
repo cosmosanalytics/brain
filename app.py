@@ -26,6 +26,7 @@ def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns.isin(Regions_Nodes)] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns.isin(Nodes)] = 0
     for i in Links: matrix.loc[i]=0   
+    st.write(matrix)
 
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
@@ -69,7 +70,6 @@ col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
-    st.write(Regions_Nodes)
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
