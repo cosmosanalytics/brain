@@ -35,10 +35,10 @@ def centrality_calc(G, lineList):
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
     closeness = pd.Series(nx.closeness_centrality(G, distance='distance')); closeness.index = lineList
     betweenness = pd.Series(nx.betweenness_centrality(G, weight='distance', normalized=True)); betweenness.index = lineList 
-    eigen = nx.eigenvector_centrality(G, weight='weight')
-    pagerank = nx.pagerank(G, weight='weight')
-    clustering = nx.clustering(G, weight='weight')
-    mean_clutering = nx.average_clustering(G, weight='weight')
+    eigen = pd.Series(nx.eigenvector_centrality(G, weight='weight')); eigen.index = lineList 
+    pagerank = pd.Series(nx.pagerank(G, weight='weight')); pagerank.index = lineList 
+    clustering = pd.Series(nx.clustering(G, weight='weight')); clustering.index = lineList 
+    mean_clutering = nx.average_clustering(G, weight='weight')); 
     return closeness, betweenness, eigen, pagerank, clustering, mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
@@ -73,7 +73,7 @@ with col1:
     threshold = st.slider('Threshold', 0.0, 1.0, 0.0)
     G = defineG(matrix, threshold, Nodes, Links)
     closeness, betweenness, eigen, pagerank, clustering, mean_clutering = centrality_calc(G,lineList)   
-    st.write(closeness)
+    fig, ax = plt.subplots(figsize=(20, 3)); closeness.sort_values(ascending=False).plot.bar(); st.pyplot(fig)  
 with col2:    
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
