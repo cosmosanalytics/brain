@@ -81,13 +81,14 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2:   
-    def color_colorlist(val):
-        color = val
-        return f'background-color: {color}'
-    refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
-    st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)       
-    brainNX(G, colorlist, colornumbs, lineList, sublist)
-
-fig, ax = plt.subplots(figsize=(20,20))
-_ = sns.heatmap(matrix, cmap='coolwarm', cbar=True, square=False, mask=None) # To apply the mask, change to mask=mask    
-st.pyplot(fig)  
+    with tab1:
+        def color_colorlist(val):
+            color = val
+            return f'background-color: {color}'
+        refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
+        st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)       
+        brainNX(G, colorlist, colornumbs, lineList, sublist)
+    with tab2:
+        fig, ax = plt.subplots(figsize=(20,20))
+        _ = sns.heatmap(matrix, cmap='coolwarm', cbar=True, square=False, mask=None) # To apply the mask, change to mask=mask    
+        st.pyplot(fig)  
