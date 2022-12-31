@@ -89,5 +89,5 @@ with col2:
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
 fig, ax = plt.subplots(figsize=(20,20))
-_ = sns.heatmap(brain, cmap='coolwarm', cbar=True, square=False, mask=None) # To apply the mask, change to mask=mask    
+_ = sns.heatmap(matrix, cmap='coolwarm', cbar=True, square=False, mask=None) # To apply the mask, change to mask=mask    
 st.pyplot(fig)  
