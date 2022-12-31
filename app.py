@@ -80,7 +80,8 @@ with col1:
     fig, ax = plt.subplots(figsize=(20, 4)); ax = closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)  
     fig, ax = plt.subplots(figsize=(20, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(20, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
-with col2:   
+with col2: 
+    tab1, tab2 = st.tabs(["Network", "Correlation Coefficient Matrix"])
     with tab1:
         def color_colorlist(val):
             color = val
