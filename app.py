@@ -88,11 +88,6 @@ with col2:
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)       
     brainNX(G, colorlist, colornumbs, lineList, sublist)
 
-# This mask variable gives you the possibility to plot only half of the correlation matrix. 
-mask = np.zeros_like(matrix.values, dtype=np.bool) 
-mask[np.triu_indices_from(mask)] = True 
-
-# plt.figure(figsize = (20, 20))
 fig, ax = plt.subplots(figsize=(20,20))
 _ = sns.heatmap(brain, cmap='coolwarm', cbar=True, square=False, mask=None) # To apply the mask, change to mask=mask    
 st.pyplot(fig)  
