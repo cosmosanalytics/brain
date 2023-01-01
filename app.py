@@ -22,8 +22,8 @@ def loadData():
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
-def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
-    matrix = abs(matrix); matrix[matrix<=threshold] = 0  
+def defineG(matrix0, threshold, Regions_Nodes, Nodes, Links):
+    matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     for i in Links: 
@@ -32,7 +32,7 @@ def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
         st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
-    return G, matrix1
+    return G, matrix
 
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
