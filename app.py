@@ -109,8 +109,8 @@ with col2:
         matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
         plot_corr(matrix1)        
     with tab3:
-        columns_L = [columns[i] if columns[i].startswith('L') for i in columns]
-        columns_R = [columns[i] if columns[i].startswith('R') for i in columns]
+        columns_L = [columns[i] for i in columns if columns[i].startswith('L')]
+        columns_R = [columns[i] for i in columns if !columns[i].startswith('L')]
         columns = columns_L + columns_R
         matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
         matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
