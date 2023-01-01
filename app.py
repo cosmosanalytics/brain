@@ -106,7 +106,7 @@ with col2:
         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [matrix1.columns.tolist()[i] for i in list((np.argsort(ind)))]
         matrix1 = matrix1.reindex_axis(columns, axis=1)
-        plot_corr(matrix, size=18)        
+        plot_corr(matrix1)        
         
 # X = df.corr().values
 # d = sch.distance.pdist(X)   # vector of ('55' choose 2) pairwise distances
