@@ -32,7 +32,7 @@ def defineG(matrix, threshold, Regions_Nodes, Nodes, Links):
         st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
-    return G
+    return G, matrix1
 
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
@@ -75,7 +75,7 @@ with col1:
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
-    G = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
+    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)  
     fig, ax = plt.subplots(figsize=(20, 4)); ax = closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)  
     fig, ax = plt.subplots(figsize=(20, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
@@ -90,9 +90,8 @@ with col2:
         st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)       
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        absMatrix = matrix.abs()
-        mask = np.zeros_like(matrix, dtype=np.bool_)
+        mask = np.zeros_like(matrix1, dtype=np.bool_)
         mask[np.triu_indices_from(mask)] = True
         fig, ax = plt.subplots(figsize=(20,20))
-        _ = sns.heatmap(absMatrix, cmap="Blues", cbar=True, square=False, mask=mask) 
+        _ = sns.heatmap(matrix1, cmap="Blues", cbar=True, square=False, mask=mask) 
         st.pyplot(fig)  
