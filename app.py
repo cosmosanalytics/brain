@@ -90,7 +90,7 @@ with col2:
         st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)       
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        mask = np.zeros_like(matrix, dtype=np.bool)
+        mask = np.zeros_like(matrix, dtype=np.bool_)
         mask[np.triu_indices_from(mask)] = True
         fig, ax = plt.subplots(figsize=(20,20))
         _ = sns.heatmap(matrix, cmap='coolwarm', cbar=True, square=False, mask=mask) 
