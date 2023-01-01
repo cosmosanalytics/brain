@@ -12,7 +12,7 @@ st.set_page_config(layout="wide")
 st.title('Brain Network')
 
 def plot_corr(corr):
-    fig, ax = plt.subplots(figsize=(30,30))
+    fig, ax = plt.subplots(figsize=(40,40))
     cax = ax.matshow(corr, cmap='Blues')
     plt.xticks(range(len(corr.columns)), corr.columns, rotation=90);
     plt.yticks(range(len(corr.columns)), corr.columns);
