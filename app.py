@@ -116,8 +116,8 @@ with col2:
         L = sch.linkage(d, method='complete')
         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
-        columns_L = [col for col in columns if col.lstrip().startswith('L')]
-        columns_R = [col for col in columns if ~col.lstrip().startswith('L')]
+        columns_L = [col for col in columns if col.lstrip()[0]=='L']
+        columns_R = [col for col in columns if ~col.lstrip()[0]=='L']
         columns = columns_L + columns_R
         m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
         m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
