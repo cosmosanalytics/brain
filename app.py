@@ -105,7 +105,7 @@ with col2:
         L = sch.linkage(d, method='complete')
         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [matrix1.columns.tolist()[i] for i in list((np.argsort(ind)))]
-        matrix1 = matrix1.reindex_axis(columns, axis=1)
+        matrix1 = matrix1[columns]
         plot_corr(matrix1)        
         
 # X = df.corr().values
