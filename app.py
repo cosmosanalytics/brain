@@ -87,9 +87,9 @@ with col1:
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)  
-    fig, ax = plt.subplots(figsize=(20, 4)); ax = closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)  
-    fig, ax = plt.subplots(figsize=(20, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
-    fig, ax = plt.subplots(figsize=(20, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
+    fig, ax = plt.subplots(figsize=(40, 4)); ax = closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)  
+    fig, ax = plt.subplots(figsize=(40, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
+    fig, ax = plt.subplots(figsize=(40, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2: 
     def color_colorlist(val):
         color = val
