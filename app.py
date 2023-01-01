@@ -5,10 +5,20 @@ import seaborn as sns
 from itertools import permutations 
 import networkx as nx
 import matplotlib.pyplot as plt
+import scipy
+import scipy.cluster.hierarchy as sch
 
 st.set_page_config(layout="wide")
 st.title('Brain Network')
 
+def plot_corr(corr):
+    fig, ax = plt.subplots(figsize=(20,20))
+    cax = ax.matshow(corr, cmap='Blues')
+    plt.xticks(range(len(corr.columns)), corr.columns, rotation=90);
+    plt.yticks(range(len(corr.columns)), corr.columns);
+    cbar = fig.colorbar(cax, ticks=[-1, 0, 1], aspect=40, shrink=.8)
+    st.pyplot(fig)  
+    
 @st.cache
 def loadData():
     matrix = pd.read_csv('matrix.csv', index_col = 0)
@@ -90,8 +100,18 @@ with col2:
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        mask = np.zeros_like(matrix1, dtype=np.bool_)
-        mask[np.triu_indices_from(mask)] = True
-        fig, ax = plt.subplots(figsize=(20,20))
-        _ = sns.heatmap(matrix1, cmap="Blues", cbar=True, square=False, mask=mask) 
-        st.pyplot(fig)  
+        X = matrix1.values
+        d = sch.distance.pdist(X)   
+        L = sch.linkage(d, method='complete')
+        ind = sch.fcluster(L, 0.5*d.max(), 'distance')
+        columns = [matrix1.columns.tolist()[i] for i in list((np.argsort(ind)))]
+        matrix1 = matrix1.reindex_axis(columns, axis=1)
+        plot_corr(matrix, size=18)        
+        
+# X = df.corr().values
+# d = sch.distance.pdist(X)   # vector of ('55' choose 2) pairwise distances
+# L = sch.linkage(d, method='complete')
+# ind = sch.fcluster(L, 0.5*d.max(), 'distance')
+# columns = [df.columns.tolist()[i] for i in list((np.argsort(ind)))]
+# df = df.reindex_axis(columns, axis=1)
+
