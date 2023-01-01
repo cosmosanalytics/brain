@@ -100,20 +100,27 @@ with col2:
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        X = matrix1.values
+        m_tab2 = matrix1.copy()
+        X = m_tab2.values
         d = sch.distance.pdist(X)   
         L = sch.linkage(d, method='complete')
         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
-        columns = [matrix1.columns.tolist()[i] for i in list((np.argsort(ind)))]
-        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
-        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
-        plot_corr(matrix1)        
+        columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
+        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+        plot_corr(m_tab2)        
     with tab3:
-        columns_L = [col for col in columns if col.startswith('L')]
-        columns_R = [col for col in columns if ~col.startswith('L')]
+        m_tab3 = matrix1.copy()
+        X = m_tab3.values
+        d = sch.distance.pdist(X)   
+        L = sch.linkage(d, method='complete')
+        ind = sch.fcluster(L, 0.5*d.max(), 'distance')
+        columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
+        columns_L = [col for col in columns if col.lstrip().startswith('L')]
+        columns_R = [col for col in columns if ~col.lstrip().startswith('L')]
         columns = columns_L + columns_R
-        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
-        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
-        plot_corr(matrix1)      
+        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+        plot_corr(m_tab3)      
 
 
