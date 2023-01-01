@@ -96,7 +96,7 @@ with col2:
         return f'background-color: {color}'
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
-    tab1, tab2 = st.tabs(["Network", "Correlation Coefficient Matrix"])
+    tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
@@ -108,6 +108,12 @@ with col2:
         matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
         matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
         plot_corr(matrix1)        
-        
+    with tab3:
+        columns_L = [columns[i] if columns[i].startswith('L') for i in columns]
+        columns_R = [columns[i] if columns[i].startswith('R') for i in columns]
+        columns = columns_L + columns_R
+        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
+        matrix1 = matrix1[columns]; matrix1 = matrix1.T; 
+        plot_corr(matrix1)      
 
 
