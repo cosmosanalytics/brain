@@ -94,5 +94,5 @@ with col2:
         mask = np.zeros_like(matrix, dtype=np.bool_)
         mask[np.triu_indices_from(mask)] = True
         fig, ax = plt.subplots(figsize=(20,20))
-        _ = sns.heatmap(absMatrix, cmap=cmap="Blues", cbar=True, square=False, mask=mask) 
+        _ = sns.heatmap(absMatrix, cmap="Blues", cbar=True, square=False, mask=mask) 
         st.pyplot(fig)  
