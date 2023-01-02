@@ -100,7 +100,7 @@ with col2:
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        m_tab2 = matrix.copy()
+        m_tab2 = matrix.abs().copy()
         X = m_tab2.values
         d = sch.distance.pdist(X)   
         L = sch.linkage(d, method='complete')
@@ -110,7 +110,7 @@ with col2:
         m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
         plot_corr(m_tab2)        
     with tab3:
-        m_tab3 = matrix.copy()
+        m_tab3 = matrix.abs().copy()
         X = m_tab3.values
         d = sch.distance.pdist(X)   
         L = sch.linkage(d, method='complete')
