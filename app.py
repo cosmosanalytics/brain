@@ -100,7 +100,7 @@ with col2:
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        m_tab2 = matrix1.copy()
+        m_tab2 = matrix.abs().copy()
         X = m_tab2.values
         d = sch.distance.pdist(X)   
         L = sch.linkage(d, method='complete')
