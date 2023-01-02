@@ -97,24 +97,31 @@ with col2:
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
     tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+    
+    matrix_order = matrix.abs().copy()
+    X = m_tab2.values
+    d = sch.distance.pdist(X)   
+    L = sch.linkage(d, method='complete')
+    ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
+    
     with tab1:      
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        m_tab2 = matrix.abs().copy()
-        X = m_tab2.values
-        d = sch.distance.pdist(X)   
-        L = sch.linkage(d, method='complete')
-        ind = sch.fcluster(L, 0.5*d.max(), 'distance')
+        m_tab2 = matrix1.copy()
+#         X = m_tab2.values
+#         d = sch.distance.pdist(X)   
+#         L = sch.linkage(d, method='complete')
+#         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
         m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
         m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
         plot_corr(m_tab2)        
     with tab3:
         m_tab3 = matrix1.copy()
-        X = m_tab3.values
-        d = sch.distance.pdist(X)   
-        L = sch.linkage(d, method='complete')
-        ind = sch.fcluster(L, 0.5*d.max(), 'distance')
+#         X = m_tab3.values
+#         d = sch.distance.pdist(X)   
+#         L = sch.linkage(d, method='complete')
+#         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
         columns_L = [col for col in columns if col.lstrip()[0]=='L']
         columns_R = [col for col in columns if col.lstrip()[0]!='L']
