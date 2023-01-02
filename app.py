@@ -99,7 +99,7 @@ with col2:
     tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
     
     matrix_order = matrix.abs().copy()
-    X = m_tab2.values
+    X = matrix_order.values
     d = sch.distance.pdist(X)   
     L = sch.linkage(d, method='complete')
     ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
