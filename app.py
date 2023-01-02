@@ -122,5 +122,3 @@ with col2:
         m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
         m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
         plot_corr(m_tab3)      
-
-
