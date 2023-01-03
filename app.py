@@ -84,8 +84,8 @@ with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
-    LinkNodes1 = st.multiselect('Select Node(s) to Remove', lineList)
-    LinkNodes2 = st.multiselect('Select Node(s) to Remove', lineList)
+    LinkNodes1 = st.multiselect('Select Links with Node(s) 1 to Remove', lineList)
+    LinkNodes2 = st.multiselect('Select Links with Node(s) 2 to Remove', lineList)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
