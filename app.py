@@ -89,7 +89,7 @@ with col1:
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)  
     fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
     closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
-    sns.distplot(list(closeness.values()), kde=False, norm_hist=False)#, ax=axes[1]); 
+    sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[1]); 
 #     axes[1].set_xlabel('Centrality Values'); 
 #     axes[1].set_ylabel('Counts')
     st.pyplot(fig) 
