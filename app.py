@@ -57,7 +57,7 @@ def centrality_calc(G, lineList):
     nx.set_node_attributes(G, dict(strength), 'strength') # Add as nodal attribute
     normstrenghts = {node: val * 1/(len(G.nodes)-1) for (node, val) in strength}
     nx.set_node_attributes(G, normstrenghts, 'strengthnorm') # Add as nodal attribute
-    normstrengthlist = np.array([val * 1/(len(G.nodes)-1) for (node, val) in strength]); normstrengthlist.index = lineList      
+    normstrengthlist = pd.Series(np.array([val * 1/(len(G.nodes)-1) for (node, val) in strength])); normstrengthlist.index = lineList      
     return closeness, betweenness, clustering, mean_clutering, normstrengthlist
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
