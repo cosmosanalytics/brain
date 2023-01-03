@@ -88,15 +88,15 @@ with col1:
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
     
-    tab1, tab2, tab3 = st.tabs(["Bar Chart", "Distribution Chart"])
+    tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
-        fig, axes = plt.subplots(3, 1, figsize=(40, 12)); 
+        fig, axes = plt.subplots(3, 1, figsize=(40, 40)); 
         closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
         betweenness.plot.bar(color=refDF['colorlist'], ax=axes[1]); axes[1].set_title('Betweenness'); 
         clustering.plot.bar(color=refDF['colorlist'], ax=axes[2]); axes[2].set_title('Clustering, average='+str(mean_clutering)); 
         st.pyplot(fig)     
     with tab2:
-        fig, axes = plt.subplots(3, 1, figsize=(40, 12)); 
+        fig, axes = plt.subplots(3, 1, figsize=(40, 40)); 
         sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
         sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
         sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts')
