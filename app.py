@@ -99,7 +99,8 @@ with col1:
         fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
         sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
         sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
-        sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts')
+        sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts'); 
+        axes[2].set_title('average path length is'+str(round(nx.average_shortest_path_length(G, weight='distance'),2))
         st.pyplot(fig)            
 with col2: 
     def color_colorlist(val):
