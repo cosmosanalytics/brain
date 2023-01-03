@@ -32,12 +32,13 @@ def loadData():
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
-def defineG(matrix0, threshold, Regions_Nodes, Nodes, Links):
+def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
-    for i in Links: 
-        matrix.loc[i]=0   
+    st.write(LinkNodes1,LinkNodes2)
+#     for i in Links: 
+#         matrix.loc[i]=0   
     if st.checkbox('Show matrix'):
         st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
@@ -83,9 +84,10 @@ with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
-    Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
+    LinkNodes1 = st.multiselect('Select Node(s) to Remove', lineList)
+    LinkNodes2 = st.multiselect('Select Node(s) to Remove', lineList)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
-    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
+    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
