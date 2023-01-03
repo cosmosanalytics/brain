@@ -89,13 +89,18 @@ with col1:
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)  
     fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
     closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
-    sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[1]); 
-#     axes[1].set_xlabel('Centrality Values'); 
-#     axes[1].set_ylabel('Counts')
+    sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Centrality Values'); axes[1].set_ylabel('Counts')
     st.pyplot(fig) 
     
-    fig, ax = plt.subplots(figsize=(40, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
-    fig, ax = plt.subplots(figsize=(40, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
+    fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
+    betweenness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Betweenness'); 
+    sns.distplot(list(betweenness.values(), ax=axes[1]), kde=False, norm_hist=False); axes[1].set_xlabel('Centrality Values'); axes[1].set_ylabel('Counts')
+    st.pyplot(fig) 
+    
+    fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
+    clustering.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Clustering, average='+str(mean_clutering)); 
+    sns.distplot(list(clustering.values()), kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Clustering Coefficient Values'); axes[1].set_ylabel('Counts')
+    st.pyplot(fig)     
 with col2: 
     def color_colorlist(val):
         color = val
