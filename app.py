@@ -90,7 +90,7 @@ with col1:
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
-        fig, axes = plt.subplots(4, 1, figsize=(20, 15)); 
+        fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
         closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
         betweenness.plot.bar(color=refDF['colorlist'], ax=axes[1]); axes[1].set_title('Betweenness'); 
         clustering.plot.bar(color=refDF['colorlist'], ax=axes[2]); axes[2].set_title('Clustering, average='+str(mean_clutering)); 
