@@ -7,6 +7,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import scipy
 import scipy.cluster.hierarchy as sch
+import itertools
 
 st.set_page_config(layout="wide")
 st.title('Brain Network')
