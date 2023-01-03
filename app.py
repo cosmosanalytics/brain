@@ -87,7 +87,11 @@ with col1:
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList)  
-    fig, ax = plt.subplots(figsize=(40, 4)); ax = closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)  
+    fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
+    closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
+    sns.distplot(list(closeness.values()), kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Centrality Values'); axes[1].set_ylabel('Counts')
+    st.pyplot(fig) 
+    
     fig, ax = plt.subplots(figsize=(40, 4)); ax = betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig) 
     fig, ax = plt.subplots(figsize=(40, 4)); ax = clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)     
 with col2: 
@@ -108,20 +112,12 @@ with col2:
         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
         m_tab2 = matrix1.copy()
-#         X = m_tab2.values
-#         d = sch.distance.pdist(X)   
-#         L = sch.linkage(d, method='complete')
-#         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
         m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
         m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
         plot_corr(m_tab2)        
     with tab3:
         m_tab3 = matrix1.copy()
-#         X = m_tab3.values
-#         d = sch.distance.pdist(X)   
-#         L = sch.linkage(d, method='complete')
-#         ind = sch.fcluster(L, 0.5*d.max(), 'distance')
         columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
         columns_L = [col for col in columns if col.lstrip()[0]=='L']
         columns_R = [col for col in columns if col.lstrip()[0]!='L']
