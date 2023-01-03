@@ -36,7 +36,7 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
-    st.write(LinkNodes1,LinkNodes2)
+    st.write(['{'+i+','+j+'}' for i,j in itertools.product(LinkNodes1,LinkNodes2)])
 #     for i in Links: 
 #         matrix.loc[i]=0   
     if st.checkbox('Show matrix'):
