@@ -94,12 +94,12 @@ with col1:
     
     fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
     betweenness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Betweenness'); 
-    sns.distplot(betweenness, ax=axes[1]), kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Centrality Values'); axes[1].set_ylabel('Counts')
+    sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Centrality Values'); axes[1].set_ylabel('Counts')
     st.pyplot(fig) 
     
     fig, axes = plt.subplots(1, 2, figsize=(40, 4)); 
     clustering.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Clustering, average='+str(mean_clutering)); 
-    sns.distplot(clustering), kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Clustering Coefficient Values'); axes[1].set_ylabel('Counts')
+    sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Clustering Coefficient Values'); axes[1].set_ylabel('Counts')
     st.pyplot(fig)     
 with col2: 
     def color_colorlist(val):
