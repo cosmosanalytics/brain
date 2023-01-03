@@ -50,15 +50,8 @@ def centrality_calc(G, lineList):
     closeness = pd.Series(nx.closeness_centrality(G, distance='distance')); closeness.index = lineList
     betweenness = pd.Series(nx.betweenness_centrality(G, weight='distance', normalized=True)); betweenness.index = lineList 
     clustering = pd.Series(nx.clustering(G, weight='weight')); clustering.index = lineList 
-    mean_clutering = nx.average_clustering(G, weight='weight') 
-    
-    strength = G.degree(weight='weight')
-    strengths = {node: val for (node, val) in strength}
-    nx.set_node_attributes(G, dict(strength), 'strength') # Add as nodal attribute
-    normstrenghts = {node: val * 1/(len(G.nodes)-1) for (node, val) in strength}
-    nx.set_node_attributes(G, normstrenghts, 'strengthnorm') # Add as nodal attribute
-    normstrengthlist = pd.Series(np.array([val * 1/(len(G.nodes)-1) for (node, val) in strength])); normstrengthlist.index = lineList      
-    return closeness, betweenness, clustering, mean_clutering, normstrengthlist
+    mean_clutering = nx.average_clustering(G, weight='weight')      
+    return closeness, betweenness, clustering, mean_clutering
 
 def brainNX(G, colorlist, colornumbs, lineList, sublist):
     strength = G.degree(weight='weight')
@@ -93,15 +86,14 @@ with col1:
     Links = st.multiselect('Select Link(s) to Remove', list(permutations(lineList, 2)))
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, Links)
-    closeness, betweenness, clustering, mean_clutering, normstrengthlist = centrality_calc(G,lineList) 
+    closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
-        fig, axes = plt.subplots(4, 1, figsize=(40, 30)); 
+        fig, axes = plt.subplots(4, 1, figsize=(20, 15)); 
         closeness.plot.bar(color=refDF['colorlist'], ax=axes[0]); axes[0].set_title('Closeness');  
         betweenness.plot.bar(color=refDF['colorlist'], ax=axes[1]); axes[1].set_title('Betweenness'); 
         clustering.plot.bar(color=refDF['colorlist'], ax=axes[2]); axes[2].set_title('Clustering, average='+str(mean_clutering)); 
-        normstrengthlist.plot.bar(color=refDF['colorlist'], ax=axes[3]); axes[3].set_title('Degree'); 
         st.pyplot(fig)     
     with tab2:
         fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
