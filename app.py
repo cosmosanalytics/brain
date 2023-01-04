@@ -33,11 +33,13 @@ def loadData():
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
-def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2):
+def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
-    st.write(['{'+i+','+j+'}' for i,j in itertools.product(LinkNodes1,LinkNodes2)])
+    st.write(LinkNodes)
+#     matrix[(matrix.index.isin(Nodes))&(matrix.columns[matrix.columns.isin(Nodes)])] = 0
+
 #     for i in Links: 
 #         matrix.loc[i]=0   
     if st.checkbox('Show matrix'):
@@ -85,10 +87,9 @@ with col1:
     Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     Nodes = st.multiselect('Select Node(s) to Remove', lineList)
-    LinkNodes1 = st.multiselect('Select Links with Node(s) 1 to Remove', lineList)
-    LinkNodes2 = st.multiselect('Select Links with Node(s) 2 to Remove', lineList)
+    LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', lineList)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
-    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes1, LinkNodes2)
+    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
