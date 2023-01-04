@@ -37,11 +37,8 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
-    st.write(matrix[matrix.index.isin(LinkNodes)][matrix.columns[matrix.columns.isin(LinkNodes)]])
-#     matrix[(matrix.index.isin(Nodes))&(matrix.columns[matrix.columns.isin(Nodes)])] = 0
+    matrix[matrix.index.isin(LinkNodes)][matrix.columns[matrix.columns.isin(LinkNodes)]] = 0
 
-#     for i in Links: 
-#         matrix.loc[i]=0   
     if st.checkbox('Show matrix'):
         st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
