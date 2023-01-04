@@ -32,7 +32,7 @@ def loadData():
     matrix.columns = lineList
     matrix.index = lineList
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
-@st.cache
+
 def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
@@ -42,7 +42,7 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G, matrix
-@st.cache
+
 def centrality_calc(G, lineList):
     G_distance_dict = {(e1, e2): 1 / abs(weight) for e1, e2, weight in G.edges(data='weight')}
     nx.set_edge_attributes(G, G_distance_dict, 'distance')
@@ -91,18 +91,16 @@ with col1:
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
-        if st.checkbox('Show Bar Chart'):
-            fig, ax = plt.subplots(figsize=(40, 4)); closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)
-            fig, ax = plt.subplots(figsize=(40, 4)); betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig)
-            fig, ax = plt.subplots(figsize=(40, 4)); clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
+        fig, ax = plt.subplots(figsize=(40, 4)); closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(40, 4)); betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(40, 4)); clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
     with tab2:
-        if st.checkbox('Show Distributin Chart'):
-            fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
-            sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
-            sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
-            sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts'); 
-            axes[2].set_title('average path length is '+str(round(nx.average_shortest_path_length(G, weight='distance'),2))+'Clustering, average='+str(round(mean_clutering,4)))
-            st.pyplot(fig)            
+        fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
+        sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
+        sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
+        sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts'); 
+        axes[2].set_title('average path length is '+str(round(nx.average_shortest_path_length(G, weight='distance'),2))+'Clustering, average='+str(round(mean_clutering,4)))
+        st.pyplot(fig)            
 with col2: 
     def color_colorlist(val):
         color = val
@@ -118,22 +116,19 @@ with col2:
     ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
     
     with tab1:  
-        if st.checkbox('Show brain network'):
-            brainNX(G, colorlist, colornumbs, lineList, sublist)
+        brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
-        if st.checkbox('Show cluster corrcoef matrix'):
-            m_tab2 = matrix1.copy()
-            columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
-            m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
-            m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
-            plot_corr(m_tab2)        
+        m_tab2 = matrix1.copy()
+        columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
+        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+        plot_corr(m_tab2)        
     with tab3:
-        if st.checkbox('Show left/right corrcoef matrix'):
-            m_tab3 = matrix1.copy()
-            columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
-            columns_L = [col for col in columns if col.lstrip()[0]=='L']
-            columns_R = [col for col in columns if col.lstrip()[0]!='L']
-            columns = columns_L + columns_R
-            m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
-            m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
-            plot_corr(m_tab3)      
+        m_tab3 = matrix1.copy()
+        columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
+        columns_L = [col for col in columns if col.lstrip()[0]=='L']
+        columns_R = [col for col in columns if col.lstrip()[0]!='L']
+        columns = columns_L + columns_R
+        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+        plot_corr(m_tab3)      
