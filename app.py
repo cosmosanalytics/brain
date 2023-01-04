@@ -39,8 +39,6 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodes), matrix.columns.isin(LinkNodes)] = 0
 
-    if st.checkbox('Show matrix'):
-        st.write(matrix)
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
     return G, matrix
@@ -87,6 +85,8 @@ with col1:
     LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', lineList)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
+    if st.checkbox('Show matrix'):
+        st.write(matrix1)    
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
