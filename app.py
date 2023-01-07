@@ -115,7 +115,8 @@ with col2:
     tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
 #     tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
     
-    matrix_order = matrix.abs().copy()
+#     matrix_order = matrix.abs().copy()
+    matrix_order = matrix1.copy()
     X = matrix_order.values
     d = sch.distance.pdist(X)   
     L = sch.linkage(d, method='complete')
