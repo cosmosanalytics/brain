@@ -37,8 +37,6 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNod
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
-#     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
-#     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodesToWeaken), matrix.columns.isin(LinkNodesToWeaken)] = 0
     matrix.loc[matrix.index.isin(LinkNodesToStrengthen), matrix.columns.isin(LinkNodesToStrengthen)] = 0.5
     np.fill_diagonal(matrix.values, 0)
@@ -99,10 +97,6 @@ with col1:
         fig, ax = plt.subplots(figsize=(20, 4)); closeness.plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)
         fig, ax = plt.subplots(figsize=(20, 4)); betweenness.plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig)
         fig, ax = plt.subplots(figsize=(20, 4)); clustering.plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
-        
-#         fig, ax = plt.subplots(figsize=(40, 4)); closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)
-#         fig, ax = plt.subplots(figsize=(40, 4)); betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig)
-#         fig, ax = plt.subplots(figsize=(40, 4)); clustering.plot.bar(color=refDF['colorlist']); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
     with tab2:
         fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
         sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
@@ -117,9 +111,7 @@ with col2:
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
     tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
-#     tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
-    
-#     matrix_order = matrix.abs().copy()
+
     matrix_order = matrix1.copy()
     X = matrix_order.values
     d = sch.distance.pdist(X)   
