@@ -39,7 +39,6 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
     st.write(matrix)
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
-    st.write(matrix)
 #     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
 #     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodes), matrix.columns.isin(LinkNodes)] = 0
@@ -90,9 +89,10 @@ with col1:
     LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', Regions_Nodes)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
+    st.write(matrix1)
     if st.checkbox('Show matrix'):
         st.write(matrix1)    
-    closeness, betweenness, clustering, mean_clutering = centrality_calc(G,lineList) 
+    closeness, betweenness, clustering, mean_clutering = centrality_calc(G,Nodes) 
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
@@ -112,7 +112,8 @@ with col2:
         return f'background-color: {color}'
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
-    tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+    tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+#     tab1, tab2, tab3 = st.tabs(["Network", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
     
     matrix_order = matrix.abs().copy()
     X = matrix_order.values
@@ -120,8 +121,8 @@ with col2:
     L = sch.linkage(d, method='complete')
     ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
     
-    with tab1:  
-        brainNX(G, colorlist, colornumbs, lineList, sublist)
+#     with tab1:  
+#         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
