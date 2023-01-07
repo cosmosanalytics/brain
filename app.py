@@ -13,7 +13,7 @@ st.set_page_config(layout="wide")
 st.title('Brain Network')
 
 def plot_corr(corr):
-    fig, ax = plt.subplots(figsize=(40,40))
+    fig, ax = plt.subplots(figsize=(20,20))
     cax = ax.matshow(corr, cmap='Blues')
     plt.xticks(range(len(corr.columns)), corr.columns, rotation=90);
     plt.yticks(range(len(corr.columns)), corr.columns);
@@ -95,9 +95,9 @@ with col1:
     
     tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
     with tab1:
-        fig, ax = plt.subplots(figsize=(40, 4)); closeness.plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)
-        fig, ax = plt.subplots(figsize=(40, 4)); betweenness.plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig)
-        fig, ax = plt.subplots(figsize=(40, 4)); clustering.plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
+        fig, ax = plt.subplots(figsize=(20, 4)); closeness.plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(20, 4)); betweenness.plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(20, 4)); clustering.plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
         
 #         fig, ax = plt.subplots(figsize=(40, 4)); closeness.plot.bar(color=refDF['colorlist']); ax.set_title('Closeness'); st.pyplot(fig)
 #         fig, ax = plt.subplots(figsize=(40, 4)); betweenness.plot.bar(color=refDF['colorlist']); ax.set_title('Betweenness'); st.pyplot(fig)
