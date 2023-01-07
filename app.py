@@ -34,6 +34,7 @@ def loadData():
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
 def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
+    st.write(Regions_Nodes, Nodes, LinkNodes)
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
     st.write(matrix)
