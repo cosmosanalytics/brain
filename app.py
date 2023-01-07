@@ -36,7 +36,9 @@ def loadData():
 def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
+    st.write(matrix)
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
+    st.write(matrix)
 #     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
 #     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodes), matrix.columns.isin(LinkNodes)] = 0
