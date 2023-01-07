@@ -34,10 +34,8 @@ def loadData():
     return matrix, np.array(colorlist), np.array(colornumbs), np.array(lineList), np.array(sublist), refDF
 
 def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
-    st.write(Regions_Nodes, Nodes, LinkNodes)
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
-    st.write(matrix)
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
 #     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
 #     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
@@ -89,7 +87,6 @@ with col1:
     LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', Regions_Nodes)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
-    st.write(matrix1)
     if st.checkbox('Show matrix'):
         st.write(matrix1)    
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,Nodes) 
