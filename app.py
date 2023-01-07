@@ -88,7 +88,7 @@ with col1:
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
-    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
+    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNodesToStrengthen)
     if st.checkbox('Show matrix'):
         st.write(matrix1)    
     closeness, betweenness, clustering, mean_clutering = centrality_calc(G,Nodes) 
