@@ -35,8 +35,10 @@ def loadData():
 
 def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodes):
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
-    matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
-    matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
+    matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
+    matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
+#     matrix[matrix.index.isin(Regions_Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Regions_Nodes)]] = 0
+#     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodes), matrix.columns.isin(LinkNodes)] = 0
 
     G = nx.from_numpy_matrix(np.array(matrix))
@@ -79,10 +81,10 @@ def brainNX(G, colorlist, colornumbs, lineList, sublist):
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
 with col1:
-    Regions = st.multiselect('Select Region(s) to Remove', set(sublist))
+    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
-    Nodes = st.multiselect('Select Node(s) to Remove', lineList)
-    LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', lineList)
+    Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
+    LinkNodes = st.multiselect('Select Links in between Node(s) to Remove', Regions_Nodes)
     threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
     G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodes)
     if st.checkbox('Show matrix'):
