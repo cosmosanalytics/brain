@@ -41,6 +41,7 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNod
 #     matrix[matrix.index.isin(Nodes)] = 0 ; matrix[matrix.columns[matrix.columns.isin(Nodes)]] = 0
     matrix.loc[matrix.index.isin(LinkNodesToWeaken), matrix.columns.isin(LinkNodesToWeaken)] = 0
     matrix.loc[matrix.index.isin(LinkNodesToStrengthen), matrix.columns.isin(LinkNodesToStrengthen)] = 0.5
+    np.fill_diagonal(matrix, 0)
 
     G = nx.from_numpy_matrix(np.array(matrix))
     G.remove_edges_from(list(nx.selfloop_edges(G)))
