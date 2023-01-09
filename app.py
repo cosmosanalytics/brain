@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 import scipy
 import scipy.cluster.hierarchy as sch
 import itertools
+import ndlib.models.epidemics as ep
+import ndlib.models.ModelConfig as mc
+from ndlib.viz.mpl.DiffusionTrend import DiffusionTrend
 
 st.set_page_config(layout="wide")
 st.title('Brain Network')
@@ -73,6 +76,19 @@ def brainNX(G, lineList):
     pos = nx.spring_layout(G, scale=5)
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
+    st.pyplot(fig)
+    
+    model = ep.SIRModel(G)
+    cfg = mc.Configuration()
+    cfg.add_model_parameter('beta', 0.001) # infection rate
+    cfg.add_model_parameter('gamma', 0.01) # recovery rate
+    cfg.add_model_parameter("percentage_infected", 0.01)
+    model.set_initial_status(cfg)
+    iterations = model.iteration_bunch(200, node_status=True)
+    trends = model.build_trends(iterations)  
+    fig, ax = plt.subplots(figsize=(20,5))
+    ax = DiffusionTrend(model, trends)
+    ax.plot()
     st.pyplot(fig)
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
