@@ -2,3 +2,4 @@ networkx
 scipy
 matplotlib
 seaborn
+ndlib
