@@ -75,7 +75,7 @@ def brainNX(G, lineList):
     fig, ax = plt.subplots(figsize=(20,20))
     edgewidth = [ d['weight'] for (u,v,d) in G.edges(data=True)]
     pos = nx.spring_layout(G, scale=5)
-    nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='red', node_size=normstrengthlist*20000, 
+    nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
 #     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
 #             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
