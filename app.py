@@ -113,8 +113,8 @@ with col2:
         return f'background-color: {color}'
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
-    tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
-#     tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+#     tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+    tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
 
     matrix_order = matrix1.copy()
     X = matrix_order.values
@@ -122,8 +122,8 @@ with col2:
     L = sch.linkage(d, method='complete')
     ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
     
-#     with tab1:  
-#         brainNX(G, matrix1.index)
+    with tab1:  
+        brainNX(G, matrix1.index)
 #         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
         m_tab2 = matrix1.copy()
