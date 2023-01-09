@@ -79,7 +79,8 @@ def brainNX(G, lineList):
     st.pyplot(fig)
 
 def dynBrainNX(G):    
-    model = ep.SIRModel(G)
+    g = nx.erdos_renyi_graph(1000, 0.1)
+    model = ep.SIRModel(g)
     cfg = mc.Configuration()
     cfg.add_model_parameter('beta', 0.01) # infection rate
     cfg.add_model_parameter('gamma', 0.01) # recovery rate
