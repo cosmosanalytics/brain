@@ -54,7 +54,6 @@ def centrality_calc(G, lineList):
     mean_clutering = nx.average_clustering(G, weight='weight')      
     return closeness, betweenness, clustering, mean_clutering
 
-# def brainNX(G, colorlist, colornumbs, lineList, sublist):
 def brainNX(G, lineList):
     strength = G.degree(weight='weight')
     strengths = {node: val for (node, val) in strength}
@@ -68,17 +67,12 @@ def brainNX(G, lineList):
         return res_dct
 
     nx.set_node_attributes(G, Convert(lineList), 'area')
-#     nx.set_node_attributes(G, Convert(colorlist), 'color')
-#     nx.set_node_attributes(G, Convert(sublist), 'subnet')
-#     nx.set_node_attributes(G, Convert(colornumbs), 'colornumb')
 
     fig, ax = plt.subplots(figsize=(20,20))
     edgewidth = [ d['weight'] for (u,v,d) in G.edges(data=True)]
     pos = nx.spring_layout(G, scale=5)
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
-#     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 2), edge_color='grey', node_size=normstrengthlist*20000, 
-#             labels=Convert(lineList), font_color='black', node_color=colornumbs/10, cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
@@ -113,7 +107,6 @@ with col2:
         return f'background-color: {color}'
     refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
     st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
-#     tab2, tab3 = st.tabs(["Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
     tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
 
     matrix_order = matrix1.copy()
@@ -124,7 +117,6 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
-#         brainNX(G, colorlist, colornumbs, lineList, sublist)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
