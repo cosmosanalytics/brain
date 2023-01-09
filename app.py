@@ -77,7 +77,8 @@ def brainNX(G, lineList):
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', cmap=plt.cm.Spectral, alpha=0.7, font_size=9)
     st.pyplot(fig)
-    
+
+def dynBrainNX(G):    
     model = ep.SIRModel(G)
     cfg = mc.Configuration()
     cfg.add_model_parameter('beta', 0.01) # infection rate
@@ -118,11 +119,6 @@ with col1:
         axes[2].set_title('average path length is '+str(round(nx.average_shortest_path_length(G, weight='distance'),2))+'Clustering, average='+str(round(mean_clutering,4)))
         st.pyplot(fig)            
 with col2: 
-    def color_colorlist(val):
-        color = val
-        return f'background-color: {color}'
-    refDF_agg = refDF.groupby(['sublist','colorlist'])['lineList'].apply(lambda x: ','.join(x)).reset_index()
-    st.dataframe(refDF_agg.style.applymap(color_colorlist, subset=['colorlist']),use_container_width=True)     
     tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
 
     matrix_order = matrix1.copy()
@@ -133,6 +129,7 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
+        dynBrainNX(G)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
