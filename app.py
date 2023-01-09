@@ -71,7 +71,7 @@ def brainNX(G, lineList):
 
     nx.set_node_attributes(G, Convert(lineList), 'area')
 
-    fig, ax = plt.subplots(figsize=(20,15))
+    fig, ax = plt.subplots(figsize=(20,17))
     edgewidth = [ d['weight'] for (u,v,d) in G.edges(data=True)]
     pos = nx.spring_layout(G, scale=5)
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
@@ -79,16 +79,15 @@ def brainNX(G, lineList):
     st.pyplot(fig)
 
 def dynBrainNX(G):    
-#     g = nx.erdos_renyi_graph(1000, 0.1)
     model = ep.SIRModel(G)
     cfg = mc.Configuration()
     cfg.add_model_parameter('beta', 0.001) # infection rate
     cfg.add_model_parameter('gamma', 0.01) # recovery rate
     cfg.add_model_parameter("percentage_infected", 0.01)
     model.set_initial_status(cfg)
-    iterations = model.iteration_bunch(200, node_status=True)
+    iterations = model.iteration_bunch(1000, node_status=True)
     trends = model.build_trends(iterations)  
-    fig, ax = plt.subplots(figsize=(20,5))
+    fig, ax = plt.subplots(figsize=(20,3))
     viz = DiffusionTrend(model, trends)
     fig = viz.plot()
     st.pyplot(fig)
