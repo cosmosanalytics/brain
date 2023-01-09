@@ -89,7 +89,8 @@ def dynBrainNX(G):
     iterations = model.iteration_bunch(200, node_status=True)
     trends = model.build_trends(iterations)  
     fig, ax = plt.subplots(figsize=(20,5))
-    ax = DiffusionTrend(model, trends)
+    viz = DiffusionTrend(model, trends)
+    ax = viz.plot()
     st.pyplot(fig)
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
