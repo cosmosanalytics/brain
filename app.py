@@ -129,7 +129,7 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
-        beta = st.slider('infection rate', 0.0, 0.01, 0.001)
+        beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
         dynBrainNX(G,beta,gamma)
     with tab2:
