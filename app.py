@@ -78,11 +78,11 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(G):    
+def dynBrainNX(G,beta,gamma):    
     model = ep.SIRModel(G)
     cfg = mc.Configuration()
-    cfg.add_model_parameter('beta', 0.001) # infection rate
-    cfg.add_model_parameter('gamma', 0.01) # recovery rate
+    cfg.add_model_parameter('beta', beta) # infection rate
+    cfg.add_model_parameter('gamma', gamma) # recovery rate
     cfg.add_model_parameter("percentage_infected", 0.01)
     model.set_initial_status(cfg)
     iterations = model.iteration_bunch(1000, node_status=True)
@@ -129,7 +129,9 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
-        dynBrainNX(G)
+        beta = st.slider('infection rate', 0.0, 0.01, 0.001)
+        gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
+        dynBrainNX(G,beta,gamma)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
