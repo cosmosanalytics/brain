@@ -91,6 +91,7 @@ def dynBrainNX(G,beta,gamma):
     viz = DiffusionTrend(model, trends)
     fig = viz.plot()
     st.pyplot(fig)
+    return iterations
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
@@ -131,7 +132,8 @@ with col2:
         brainNX(G, matrix1.index)
         beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
-        dynBrainNX(G,beta,gamma)
+        iterations = dynBrainNX(G,beta,gamma)
+        st.write(iterations)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
