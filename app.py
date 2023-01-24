@@ -135,9 +135,8 @@ with col2:
         iterations = dynBrainNX(G,beta,gamma)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
-        dff.columns = dff.columns+10
-        st.table(df)
-        st.write(Regions_Nodes)
+        dff.columns = matrix1.columns
+        st.table(dff)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
