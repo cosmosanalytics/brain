@@ -85,7 +85,7 @@ def dynBrainNX(G,beta,gamma):
     cfg.add_model_parameter('gamma', gamma) # recovery rate
     cfg.add_model_parameter("percentage_infected", 0.01)
     model.set_initial_status(cfg)
-    iterations = model.iteration_bunch(1000, node_status=True)
+    iterations = model.iteration_bunch(100, node_status=True)
     trends = model.build_trends(iterations)  
     fig, ax = plt.subplots(figsize=(20,3))
     viz = DiffusionTrend(model, trends)
@@ -136,7 +136,7 @@ with col2:
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
         dff.columns = matrix1.columns
-        st.table(dff)
+        st.table(dff.T)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
