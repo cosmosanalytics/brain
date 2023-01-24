@@ -133,8 +133,9 @@ with col2:
         beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
         iterations = dynBrainNX(G,beta,gamma)
-        df = iterations['status'].apply(lambda x: pd.Series(x))
-        df.columns = np.arange(100,200)
+        df = pd.DataFrame(iterations)
+        dff = df['status'].apply(lambda x: pd.Series(x))
+        dff.columns = dff.columns+10
         st.table(df)
         st.write(Regions_Nodes)
     with tab2:
