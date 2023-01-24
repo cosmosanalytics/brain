@@ -136,7 +136,7 @@ with col2:
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
         dff.columns = matrix1.columns
-        st.table(dff.T)
+        st.table(dff.style.applymap('color: %s' % 'red' if val > 0 else 'green').T)
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
