@@ -133,7 +133,7 @@ with col2:
         beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
         iterations = dynBrainNX(G,beta,gamma)
-        st.write(iterations)
+        st.write(pd.DataFrame(iterations)[['status']])
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
