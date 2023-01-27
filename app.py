@@ -99,8 +99,8 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    st.write(refDF[refDF['sublist'].isin(Regions)]['lineList'])
-    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+    Regions_Nodes_dict = refDF[refDF['sublist'].isin(Regions)]['lineList']
+    Regions_Nodes = Regions_Nodes_dict.values
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
@@ -136,7 +136,7 @@ with col2:
         beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
         infected_nodes = st.multiselect('Select Infected Node(s)', Nodes)
-        iterations = dynBrainNX(G,beta,gamma,infected_nodes)
+        iterations = dynBrainNX(G,beta,gamma,Regions_Nodes_dict.index[np.array(infected_nodes)].to_list())
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
         dff.columns = matrix1.columns
