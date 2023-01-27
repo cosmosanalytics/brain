@@ -99,7 +99,7 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    Regions_Nodes = Regions_Nodes_dict.values
+    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
