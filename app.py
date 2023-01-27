@@ -85,7 +85,7 @@ def dynBrainNX(G,beta,gamma,infected_nodes):
     cfg.add_model_parameter('beta', beta) # infection rate
     cfg.add_model_parameter('gamma', gamma) # recovery rate
     cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
-    cfg.add_model_initial_configuration("Infected", np.array(infected_nodes))
+#     cfg.add_model_initial_configuration("Infected", np.array(infected_nodes))
     model.set_initial_status(cfg)
     iterations = model.iteration_bunch(100, node_status=True)
     trends = model.build_trends(iterations)  
@@ -99,6 +99,7 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 col1, col2 = st.columns(2)
 with col1:
     Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
+    st.write(refDF[refDF['sublist'].isin(Regions)]['lineList'])
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
