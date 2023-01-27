@@ -78,7 +78,8 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(G,beta,gamma,infected_nodes):    
+def dynBrainNX(G,beta,gamma,infected_nodes):  
+    print(infected_nodes)
     model = ep.SIRModel(G)
     cfg = mc.Configuration()
     cfg.add_model_parameter('beta', beta) # infection rate
