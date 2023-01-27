@@ -136,7 +136,7 @@ with col2:
         gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
         infected_nodes = st.multiselect('Select Infected Node(s)', Nodes)
         s_Nodes = pd.Series(Nodes); st.write(s_Nodes)
-        infected_nodes = s.index[s.isin(np.array(infected_nodes))].to_list(); st.write(infected_nodes)
+        infected_nodes = s_Nodes.index[s_Nodes.isin(np.array(infected_nodes))].to_list(); st.write(infected_nodes)
         iterations = dynBrainNX(G,beta,gamma,infected_nodes)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
