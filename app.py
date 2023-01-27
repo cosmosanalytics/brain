@@ -85,7 +85,7 @@ def dynBrainNX(G,beta,gamma,infected_nodes):
     cfg.add_model_parameter('beta', beta) # infection rate
     cfg.add_model_parameter('gamma', gamma) # recovery rate
     cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
-#     cfg.add_model_initial_configuration("Infected", infected_nodes)
+    cfg.add_model_initial_configuration("Infected", np.array(infected_nodes))
     model.set_initial_status(cfg)
     iterations = model.iteration_bunch(100, node_status=True)
     trends = model.build_trends(iterations)  
