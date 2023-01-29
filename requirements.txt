@@ -3,4 +3,4 @@ scipy
 matplotlib
 seaborn
 ndlib
-sklearn
+scikit-learn
