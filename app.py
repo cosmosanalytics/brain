@@ -79,34 +79,14 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(g,beta,gamma,infected_nodes):  
-    g = nx.erdos_renyi_graph(1000, 0.1)
+def dynBrainNX(g):
     model = opn.WHKModel(g)
     config = mc.Configuration()
-    config.add_model_parameter("epsilon", 0.32)
-    weight = 0.2
-    if isinstance(g, nx.Graph):
-        edges = g.edges
-    else:
-        edges = [(g.vs[e.tuple[0]]['name'], g.vs[e.tuple[1]]['name']) for e in g.es]
-
-    for e in edges:
-        config.add_edge_configuration("weight", e, weight) 
+    config.add_model_parameter("epsilon", 1)
+    for e in g.edges:
+        config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])    
     model.set_initial_status(config)
-    
-#     model = ep.SIRModel(G)
-#     cfg = mc.Configuration()
-#     cfg.add_model_parameter('beta', beta) # infection rate
-#     cfg.add_model_parameter('gamma', gamma) # recovery rate
-#     cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
-#     cfg.add_model_initial_configuration("Infected", infected_nodes)
-#     model.set_initial_status(cfg)
-    iterations = model.iteration_bunch(20, node_status=True)
-    trends = model.build_trends(iterations)  
-    fig, ax = plt.subplots(figsize=(20,3))
-    viz = DiffusionTrend(model, trends)
-    fig = viz.plot()
-    st.pyplot(fig)
+    iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
@@ -148,15 +128,19 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
-        beta = st.slider('infection rate', 0.0, 0.01, 0.01, step=0.001, format='%2.3f')
-        gamma = st.slider('recovery rate', 0.0, 0.1, 0.0)
-        infected_nodes = st.multiselect('Select Infected Node(s)', Nodes, ['RP1'])
-        s_Nodes = pd.Series(Nodes); 
-        iterations = dynBrainNX(G,beta,gamma,s_Nodes.index[s_Nodes.isin(infected_nodes)].to_list())
-        df = pd.DataFrame(iterations)
-        dff = df['status'].apply(lambda x: pd.Series(x))
-        dff.columns = matrix1.columns
-        st.table(dff.T.style.applymap(lambda x: "background-color: blue" if x==0 else "background-color: yellow" if x==1 else "background-color: green" if x==2 else "background-color: white"))
+        if st.button('simulation'):
+            iterations = dynBrainNX(G)
+            df = pd.DataFrame(iterations)
+            dff = df['status'].apply(lambda x: pd.Series(x))
+            dff.columns = matrix1.columns
+            st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
+            fig, ax = plt.subplots(figsize=(20, 5));
+            dff.plot(ax=ax)
+            st.pyplot(fig)
+            res = dff.T
+            res = res[res.columns[-1]]
+            st.table(res[res<-0.99].index)
+            st.table(res[res>0.99].index)        
     with tab2:
         m_tab2 = matrix1.copy()
         columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
