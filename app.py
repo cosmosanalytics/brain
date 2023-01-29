@@ -97,8 +97,10 @@ def dynBrainNX(G,beta,gamma,infected_nodes):
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
 with col1:
-    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+#     Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
+    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['SM'])
+#     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+    Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RPG4','RT2','LPG12']
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
