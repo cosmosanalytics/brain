@@ -78,14 +78,27 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(G,beta,gamma,infected_nodes):  
-    model = ep.SIRModel(G)
-    cfg = mc.Configuration()
-    cfg.add_model_parameter('beta', beta) # infection rate
-    cfg.add_model_parameter('gamma', gamma) # recovery rate
-    cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
-    cfg.add_model_initial_configuration("Infected", infected_nodes)
-    model.set_initial_status(cfg)
+def dynBrainNX(g,beta,gamma,infected_nodes):  
+    model = opn.WHKModel(g)
+    config = mc.Configuration()
+    config.add_model_parameter("epsilon", 0.32)
+    weight = 0.2
+    if isinstance(g, nx.Graph):
+        edges = g.edges
+    else:
+        edges = [(g.vs[e.tuple[0]]['name'], g.vs[e.tuple[1]]['name']) for e in g.es]
+
+    for e in edges:
+        config.add_edge_configuration("weight", e, weight) 
+    model.set_initial_status(config)
+    
+#     model = ep.SIRModel(G)
+#     cfg = mc.Configuration()
+#     cfg.add_model_parameter('beta', beta) # infection rate
+#     cfg.add_model_parameter('gamma', gamma) # recovery rate
+#     cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
+#     cfg.add_model_initial_configuration("Infected", infected_nodes)
+#     model.set_initial_status(cfg)
     iterations = model.iteration_bunch(100, node_status=True)
     trends = model.build_trends(iterations)  
     fig, ax = plt.subplots(figsize=(20,3))
