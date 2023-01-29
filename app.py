@@ -80,6 +80,7 @@ def brainNX(G, lineList):
     st.pyplot(fig)
 
 def dynBrainNX(g,beta,gamma,infected_nodes):  
+    g = nx.erdos_renyi_graph(1000, 0.1)
     model = opn.WHKModel(g)
     config = mc.Configuration()
     config.add_model_parameter("epsilon", 0.32)
@@ -100,7 +101,7 @@ def dynBrainNX(g,beta,gamma,infected_nodes):
 #     cfg.add_model_parameter('fraction_infected', 0.01) # recovery rate
 #     cfg.add_model_initial_configuration("Infected", infected_nodes)
 #     model.set_initial_status(cfg)
-    iterations = model.iteration_bunch(100, node_status=True)
+    iterations = model.iteration_bunch(20, node_status=True)
     trends = model.build_trends(iterations)  
     fig, ax = plt.subplots(figsize=(20,3))
     viz = DiffusionTrend(model, trends)
