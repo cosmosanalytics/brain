@@ -133,9 +133,9 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
-        beta = st.slider('infection rate', 0.0, 0.01, 0.001, step=0.001, format='%2.3f')
-        gamma = st.slider('recovery rate', 0.0, 0.1, 0.01)
-        infected_nodes = st.multiselect('Select Infected Node(s)', Nodes)
+        beta = st.slider('infection rate', 0.0, 0.01, 0.01, step=0.001, format='%2.3f')
+        gamma = st.slider('recovery rate', 0.0, 0.1, 0.0)
+        infected_nodes = st.multiselect('Select Infected Node(s)', Nodes, ['RP1'])
         s_Nodes = pd.Series(Nodes); 
         iterations = dynBrainNX(G,beta,gamma,s_Nodes.index[s_Nodes.isin(infected_nodes)].to_list())
         df = pd.DataFrame(iterations)
