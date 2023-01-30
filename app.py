@@ -79,10 +79,10 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(g):
+def dynBrainNX(g,epsilon,init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
-    config.add_model_parameter("epsilon", 1)
+    config.add_model_parameter("epsilon", epsilon)
     for e in g.edges:
         config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])          
     model.set_initial_status(config)
@@ -133,11 +133,13 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
+        st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
+        epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
         init = st.text_input('Assign initial state values (-1,1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0')
         init = pd.Series(init.split(',')).astype(float)
  
         if st.button('simulation'):
-            iterations = dynBrainNX(G,init)
+            iterations = dynBrainNX(G,epsilon,init)
             df = pd.DataFrame(iterations)
             dff = df['status'].apply(lambda x: pd.Series(x))
             dff.columns = matrix1.columns
