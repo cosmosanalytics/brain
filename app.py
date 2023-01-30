@@ -84,8 +84,13 @@ def dynBrainNX(g):
     config = mc.Configuration()
     config.add_model_parameter("epsilon", 1)
     for e in g.edges:
-        config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])    
+        config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])          
     model.set_initial_status(config)
+
+    initial_statuses = {node: i for node,i in zip(g.nodes(),init)}  # custom initial statuses: values in [-1, 1]
+    model.status = initial_statuses
+    model.initial_status = initial_statuses    
+    
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 
@@ -128,8 +133,11 @@ with col2:
     
     with tab1:  
         brainNX(G, matrix1.index)
+        init = st.text_input('Assign initial state values (-1,1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0')
+        init = pd.Series(init.split(',')).astype(float)
+ 
         if st.button('simulation'):
-            iterations = dynBrainNX(G)
+            iterations = dynBrainNX(G,init)
             df = pd.DataFrame(iterations)
             dff = df['status'].apply(lambda x: pd.Series(x))
             dff.columns = matrix1.columns
