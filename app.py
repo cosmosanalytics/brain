@@ -153,8 +153,8 @@ with col2:
             dff = df['status'].apply(lambda x: pd.Series(x))
             dff.columns = matrix1.columns
             st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
-            fig, ax = plt.subplots(figsize=(20, 5));
-            dff.plot(ax=ax)
+            fig, ax = plt.subplots(figsize=(20, 10));
+            dff.plot(ax=ax).legend(loc='best')
             st.pyplot(fig)
             res = dff.T
             res = res[res.columns[-1]]
