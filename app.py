@@ -145,7 +145,7 @@ with col2:
         VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
                            
-        init = SM.append(DMN).append(LIM).append(VIS).append(FP).append(VA).append(MS)
+        init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
  
         if st.button('simulation'):
             iterations = dynBrainNX(G,epsilon,init)
