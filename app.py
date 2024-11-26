@@ -12,7 +12,7 @@ import ndlib.models.epidemics as ep
 import ndlib.models.ModelConfig as mc
 import ndlib.models.opinions as opn
 from ndlib.viz.mpl.DiffusionTrend import DiffusionTrend
-st.set_option('deprecation.showPyplotGlobalUse', False)
+#st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(layout="wide")
 st.title('Brain Network')
 
