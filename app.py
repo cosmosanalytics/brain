@@ -98,8 +98,8 @@ def dynBrainNX(g,epsilon,init):
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
 with col1:
-    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['SM'])
+    # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
+    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
     Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
     # Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RT2','LPG12','LIC1','LPG4','LT1','LP1','RC1','RPG7','RPG9','LSPL1','LC1','LPG5','LC2','RC2','LSPL2',\
     #                  'RSPL1','LPG6','RPG8','LIC3','B1','LIC2','RPG6','RPG2','LT2','LPG8','RPG10','RAG1','LAG1']
