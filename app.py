@@ -79,24 +79,6 @@ def brainNX(G, lineList):
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
-'''
-def dynBrainNX(g,epsilon,init):
-    model = opn.WHKModel(g)
-    config = mc.Configuration()
-    config.add_model_parameter("epsilon", epsilon)
-    for e in g.edges:
-        config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])          
-    model.set_initial_status(config)
-
-    initial_statuses = {node: i for node,i in zip(g.nodes(),init)}  # custom initial statuses: values in [-1, 1]
-    model.status = initial_statuses
-    model.initial_status = initial_statuses    
-    
-    iterations = model.iteration_bunch(100, node_status=True)
-    return iterations
-'''
-
-import networkx as nx
 
 def dynBrainNX(g, epsilon, init):
     model = opn.WHKModel(g)
