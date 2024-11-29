@@ -206,7 +206,8 @@ with col2:
             df = pd.DataFrame(iterations)
             dff = df['status'].apply(lambda x: pd.Series(x))
             dff.columns = matrix1.columns
-            st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
+            st.table(dff)
+            # st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
             fig, ax = plt.subplots(figsize=(20, 10));
             dff.plot(ax=ax).legend(loc='best')
             st.pyplot(fig)
