@@ -167,13 +167,14 @@ with col1:
     # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
     # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
     # Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
-    Regions_Nodes = ['LPG4','LP1','RC1','LSPL1','RAG1','LAG1',\ #DMN
-                     'LC1','LC2','LH1','RH1','RH2',\ #LIM
-                     'LIC2','RFP1','RFP2','LFP1','LFP2',\ #FP
-                     'RPG2','LT2','LPG8','RPG10',\ #VA
-                     'RAG2','RP1','RT1','RIC1','RT2','LPG12',\ #SM
-                     'RSPL1','LPG6','RPG8','LIC3','B1',\ #VIS
-                     'RAG1','LAG1'] #MA
+    # DMN, LIM, FP, VA, SM, VIS, MA
+    Regions_Nodes = ['LPG4','LP1','RC1','LSPL1','RAG1','LAG1',\
+                     'LC1','LC2','LH1','RH1','RH2',\
+                     'LIC2','RFP1','RFP2','LFP1','LFP2',\
+                     'RPG2','LT2','LPG8','RPG10',\
+                     'RAG2','RP1','RT1','RIC1','RT2','LPG12',\
+                     'RSPL1','LPG6','RPG8','LIC3','B1',\
+                     'RAG1','LAG1']
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
