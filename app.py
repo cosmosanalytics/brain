@@ -155,8 +155,7 @@ with col1:
                      'LIC2','RFP1','RFP2','LFP1','LFP2',\
                      'RPG2','LT2','LPG8','RPG10',\
                      'RAG2','RP1','RT1','RIC1','RT2','LPG12',\
-                     'RSPL1','LPG6','RPG8','LIC3','B1',\
-                     'RAG1','LAG1']
+                     'RSPL1','LPG6','RPG8','LIC3','B1']
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
@@ -197,9 +196,9 @@ with col2:
         VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1, LPG6, RPG8, LIC3, B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2, RFP1, RFP2, LFP1, LFP2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2, LT2, LPG8, RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
+        # MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
                            
-        init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
+        init = pd.concat([SM, DMN, LIM, VIS, FP, VA])
  
         if st.button('simulation'):
             iterations = dynBrainNX(G,epsilon,init)
