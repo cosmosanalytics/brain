@@ -79,7 +79,7 @@ def brainNX(G, lineList):
     nx.draw(G, pos, with_labels=True, width=np.power(edgewidth, 1), edge_color='red', node_size=normstrengthlist*20000, 
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
-
+'''
 def dynBrainNX(g,epsilon,init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
@@ -92,6 +92,47 @@ def dynBrainNX(g,epsilon,init):
     model.status = initial_statuses
     model.initial_status = initial_statuses    
     
+    iterations = model.iteration_bunch(100, node_status=True)
+    return iterations
+'''
+
+def dynBrainNX(g, epsilon, init):
+    model = opn.WHKModel(g)
+    config = mc.Configuration()
+    config.add_model_parameter("epsilon", epsilon)
+
+    # Identify nodes with negative initial states
+    negative_nodes = [node for node, value in zip(g.nodes(), init) if value < 0]
+
+    # Calculate the total weight to be redistributed
+    edges_to_modify = [e for e in g.edges() if any(node in e for node in negative_nodes)]
+    total_weight_to_redistribute = sum(g.get_edge_data(*e)['weight'] for e in edges_to_modify)
+
+    # Identify edges not connected to negative nodes
+    non_negative_edges = [e for e in g.edges() if not any(node in e for node in negative_nodes)]
+
+    # Redistribute the weight
+    if non_negative_edges:
+        weight_per_edge = total_weight_to_redistribute / len(non_negative_edges)
+        
+        for e in g.edges():
+            if e in edges_to_modify:
+                config.add_edge_configuration("weight", e, 0)
+            else:
+                original_weight = g.get_edge_data(*e)['weight']
+                new_weight = original_weight + weight_per_edge
+                config.add_edge_configuration("weight", e, new_weight)
+    else:
+        # If all edges are connected to negative nodes, we can't redistribute
+        for e in g.edges():
+            config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
+
+    model.set_initial_status(config)
+
+    initial_statuses = {node: i for node, i in zip(g.nodes(), init)}  # custom initial statuses: values in [-1, 1]
+    model.status = initial_statuses
+    model.initial_status = initial_statuses
+
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 
