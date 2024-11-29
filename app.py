@@ -95,6 +95,8 @@ def dynBrainNX(g,epsilon,init):
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 '''
+import networkx as nx
+
 def dynBrainNX(g, epsilon, init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
@@ -103,27 +105,48 @@ def dynBrainNX(g, epsilon, init):
     # Identify nodes with negative initial states
     negative_nodes = [node for node, value in zip(g.nodes(), init) if value < 0]
 
-    # Identify edges not connected to negative nodes
-    non_negative_edges = [e for e in g.edges() if not any(node in e for node in negative_nodes)]
+    if negative_nodes:
+        # Create a copy of the graph without negative nodes
+        g_without_negatives = g.copy()
+        g_without_negatives.remove_nodes_from(negative_nodes)
 
-    if negative_nodes and non_negative_edges:
-        # Calculate the total weight of non-negative edges
-        total_weight = sum(g.get_edge_data(*e)['weight'] for e in non_negative_edges)
-        
-        # Calculate the scaling factor
-        scaling_factor = (total_weight + 1) / total_weight  # Add 1 to slightly increase total weight
+        # Find all pairs of nodes that were connected through negative nodes
+        affected_pairs = []
+        for node1 in g.nodes():
+            for node2 in g.nodes():
+                if node1 < node2 and node1 not in negative_nodes and node2 not in negative_nodes:
+                    path = nx.shortest_path(g, node1, node2)
+                    if any(node in negative_nodes for node in path):
+                        affected_pairs.append((node1, node2))
+
+        # Find the shortest bypass paths for affected pairs
+        bypass_edges = set()
+        for node1, node2 in affected_pairs:
+            if nx.has_path(g_without_negatives, node1, node2):
+                bypass_path = nx.shortest_path(g_without_negatives, node1, node2)
+                bypass_edges.update(zip(bypass_path[:-1], bypass_path[1:]))
+
+        # Calculate the total weight to redistribute
+        total_weight_to_redistribute = sum(g.degree(node, weight='weight') for node in negative_nodes)
 
         # Redistribute the weight
-        for e in g.edges():
-            if e in non_negative_edges:
-                original_weight = g.get_edge_data(*e)['weight']
-                new_weight = original_weight * scaling_factor
-                config.add_edge_configuration("weight", e, new_weight)
-            else:
-                # Keep the original weight for edges connected to negative nodes
+        if bypass_edges:
+            weight_per_edge = total_weight_to_redistribute / len(bypass_edges)
+            
+            for e in g.edges():
+                if e in bypass_edges or (e[1], e[0]) in bypass_edges:
+                    original_weight = g.get_edge_data(*e)['weight']
+                    new_weight = original_weight + weight_per_edge
+                    config.add_edge_configuration("weight", e, new_weight)
+                else:
+                    # Keep the original weight for other edges
+                    config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
+        else:
+            # If there are no bypass edges, keep original weights
+            for e in g.edges():
                 config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
     else:
-        # If there are no negative nodes or all edges are connected to negative nodes, keep original weights
+        # If there are no negative nodes, keep original weights
         for e in g.edges():
             config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
 
@@ -135,6 +158,7 @@ def dynBrainNX(g, epsilon, init):
 
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
+
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
