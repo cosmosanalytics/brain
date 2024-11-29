@@ -210,7 +210,7 @@ with col2:
         st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
         epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
         SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2, RP1, RT1, RIC1, RT2, LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LPG4', LP1, RC1, LSPL1, RAG1, LAG1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LPG4, LP1, RC1, LSPL1, RAG1, LAG1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1, LC2, LH1, RH1, RH2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1, LPG6, RPG8, LIC3, B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
         FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2, RFP1, RFP2, LFP1, LFP2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
