@@ -95,7 +95,6 @@ def dynBrainNX(g,epsilon,init):
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 '''
-
 def dynBrainNX(g, epsilon, init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
@@ -104,26 +103,27 @@ def dynBrainNX(g, epsilon, init):
     # Identify nodes with negative initial states
     negative_nodes = [node for node, value in zip(g.nodes(), init) if value < 0]
 
-    # Calculate the total weight to be redistributed
-    edges_to_modify = [e for e in g.edges() if any(node in e for node in negative_nodes)]
-    total_weight_to_redistribute = sum(g.get_edge_data(*e)['weight'] for e in edges_to_modify)
-
     # Identify edges not connected to negative nodes
     non_negative_edges = [e for e in g.edges() if not any(node in e for node in negative_nodes)]
 
-    # Redistribute the weight
-    if non_negative_edges:
-        weight_per_edge = total_weight_to_redistribute / len(non_negative_edges)
+    if negative_nodes and non_negative_edges:
+        # Calculate the total weight of non-negative edges
+        total_weight = sum(g.get_edge_data(*e)['weight'] for e in non_negative_edges)
         
+        # Calculate the scaling factor
+        scaling_factor = (total_weight + 1) / total_weight  # Add 1 to slightly increase total weight
+
+        # Redistribute the weight
         for e in g.edges():
-            if e in edges_to_modify:
-                config.add_edge_configuration("weight", e, 0)
-            else:
+            if e in non_negative_edges:
                 original_weight = g.get_edge_data(*e)['weight']
-                new_weight = original_weight + weight_per_edge
+                new_weight = original_weight * scaling_factor
                 config.add_edge_configuration("weight", e, new_weight)
+            else:
+                # Keep the original weight for edges connected to negative nodes
+                config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
     else:
-        # If all edges are connected to negative nodes, we can't redistribute
+        # If there are no negative nodes or all edges are connected to negative nodes, keep original weights
         for e in g.edges():
             config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
 
