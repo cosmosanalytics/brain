@@ -80,82 +80,29 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(g, epsilon, init):
+def dynBrainNX(g,epsilon,init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
     config.add_model_parameter("epsilon", epsilon)
-
-    # Identify nodes with negative initial states
-    negative_nodes = [node for node, value in zip(g.nodes(), init) if value < 0]
-
-    if negative_nodes:
-        # Create a copy of the graph without negative nodes
-        g_without_negatives = g.copy()
-        g_without_negatives.remove_nodes_from(negative_nodes)
-
-        # Find all pairs of nodes that were connected through negative nodes
-        affected_pairs = []
-        for node1 in g.nodes():
-            for node2 in g.nodes():
-                if node1 < node2 and node1 not in negative_nodes and node2 not in negative_nodes:
-                    path = nx.shortest_path(g, node1, node2)
-                    if any(node in negative_nodes for node in path):
-                        affected_pairs.append((node1, node2))
-
-        # Find the shortest bypass paths for affected pairs
-        bypass_edges = set()
-        for node1, node2 in affected_pairs:
-            if nx.has_path(g_without_negatives, node1, node2):
-                bypass_path = nx.shortest_path(g_without_negatives, node1, node2)
-                bypass_edges.update(zip(bypass_path[:-1], bypass_path[1:]))
-
-        # Calculate the total weight to redistribute
-        total_weight_to_redistribute = sum(g.degree(node, weight='weight') for node in negative_nodes)
-
-        # Redistribute the weight
-        if bypass_edges:
-            weight_per_edge = total_weight_to_redistribute / len(bypass_edges)
-            
-            for e in g.edges():
-                if e in bypass_edges or (e[1], e[0]) in bypass_edges:
-                    original_weight = g.get_edge_data(*e)['weight']
-                    new_weight = original_weight + weight_per_edge
-                    config.add_edge_configuration("weight", e, new_weight)
-                else:
-                    # Keep the original weight for other edges
-                    config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
-        else:
-            # If there are no bypass edges, keep original weights
-            for e in g.edges():
-                config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
-    else:
-        # If there are no negative nodes, keep original weights
-        for e in g.edges():
-            config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])
-
+    for e in g.edges:
+        config.add_edge_configuration("weight", e, g.get_edge_data(*e)['weight'])          
     model.set_initial_status(config)
 
-    initial_statuses = {node: i for node, i in zip(g.nodes(), init)}  # custom initial statuses: values in [-1, 1]
+    initial_statuses = {node: i for node,i in zip(g.nodes(),init)}  # custom initial statuses: values in [-1, 1]
     model.status = initial_statuses
-    model.initial_status = initial_statuses
-
+    model.initial_status = initial_statuses    
+    
     iterations = model.iteration_bunch(100, node_status=True)
     return iterations
-
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
 col1, col2 = st.columns(2)
 with col1:
     # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
-    # Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
-    # DMN, LIM, FP, VA, SM, VIS, MA
-    Regions_Nodes = ['LPG4','LP1','RC1','LSPL1','RAG1','LAG1',\
-                     'LC1','LC2','LH1','RH1','RH2',\
-                     'LIC2','RFP1','RFP2','LFP1','LFP2',\
-                     'RPG2','LT2','LPG8','RPG10',\
-                     'RAG2','RP1','RT1','RIC1','RT2','LPG12',\
-                     'RSPL1','LPG6','RPG8','LIC3','B1']
+    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
+    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+    # Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RT2','LPG12','LIC1','LPG4','LT1','LP1','RC1','RPG7','RPG9','LSPL1','LC1','LPG5','LC2','RC2','LSPL2',\
+    #                  'RSPL1','LPG6','RPG8','LIC3','B1','LIC2','RPG6','RPG2','LT2','LPG8','RPG10','RAG1','LAG1']
     Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
     LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
     LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
@@ -190,15 +137,15 @@ with col2:
         brainNX(G, matrix1.index)
         st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
         epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
-        SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2, RP1, RT1, RIC1, RT2, LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LPG4, LP1, RC1, LSPL1, RAG1, LAG1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1, LC2, LH1, RH1, RH2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1, LPG6, RPG8, LIC3, B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2, RFP1, RFP2, LFP1, LFP2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2, LT2, LPG8, RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        # MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
+        SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2,RP1,RT1,RIC1,RT2,LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LIC1,LPG4,LT1,LP1,RC1,RPG7,RPG9,LSPL1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1,LPG5,LC2,RC2,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1,LPG6,RPG8,LIC3,B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2,RPG6)', '0.0, 0.0').split(',')).astype(float)
+        VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+        MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
                            
-        init = pd.concat([SM, DMN, LIM, VIS, FP, VA])
+        init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
  
         if st.button('simulation'):
             iterations = dynBrainNX(G,epsilon,init)
