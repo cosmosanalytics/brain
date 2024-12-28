@@ -15,7 +15,7 @@ from ndlib.viz.mpl.DiffusionTrend import DiffusionTrend
 #st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(layout="wide")
 st.title('Brain Network')
-
+'''
 def plot_corr(corr):
     fig, ax = plt.subplots(figsize=(20,20))
     cax = ax.matshow(corr, cmap='Blues')
@@ -23,7 +23,20 @@ def plot_corr(corr):
     plt.yticks(range(len(corr.columns)), corr.columns);
     cbar = fig.colorbar(cax, ticks=[-1, 0, 1], aspect=40, shrink=.8)
     st.pyplot(fig)  
+'''
+def plot_corr(corr):
+    fig, ax = plt.subplots(figsize=(20,20))
+    cax = ax.matshow(corr, cmap='Blues')
     
+    # Increase font size for x-axis tick labels
+    plt.xticks(range(len(corr.columns)), corr.columns, rotation=90, fontsize=12)
+    
+    # Increase font size for y-axis tick labels
+    plt.yticks(range(len(corr.columns)), corr.columns, fontsize=12)
+    
+    cbar = fig.colorbar(cax, ticks=[-1, 0, 1], aspect=40, shrink=.8)
+    st.pyplot(fig)
+
 @st.cache
 def loadData():
     matrix = pd.read_csv('matrix.csv', index_col = 0)
