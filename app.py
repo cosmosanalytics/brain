@@ -109,82 +109,84 @@ def dynBrainNX(g,epsilon,init):
     return iterations
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
-col1, col2 = st.columns(2)
-with col1:
-    # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-    Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
-    Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
-    # Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RT2','LPG12','LIC1','LPG4','LT1','LP1','RC1','RPG7','RPG9','LSPL1','LC1','LPG5','LC2','RC2','LSPL2',\
-    #                  'RSPL1','LPG6','RPG8','LIC3','B1','LIC2','RPG6','RPG2','LT2','LPG8','RPG10','RAG1','LAG1']
-    Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
-    LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
-    LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
-    threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
-    G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNodesToStrengthen)
-    if st.checkbox('Show matrix'):
-        st.write(matrix1)    
-    closeness, betweenness, clustering, mean_clutering = centrality_calc(G,Nodes) 
-    
-    tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
-    with tab1:
-        fig, ax = plt.subplots(figsize=(20, 4)); closeness.plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)
-        fig, ax = plt.subplots(figsize=(20, 4)); betweenness.plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig)
-        fig, ax = plt.subplots(figsize=(20, 4)); clustering.plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
-    with tab2:
-        fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
-        sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
-        sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
-        sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts'); 
-        axes[2].set_title('average path length is '+str(round(nx.average_shortest_path_length(G, weight='distance'),2))+'Clustering, average='+str(round(mean_clutering,4)))
-        st.pyplot(fig)            
-with col2: 
-    tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+#col1, col2 = st.columns(2)
+#with col1:
+###################
+# Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
+Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
+Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+# Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RT2','LPG12','LIC1','LPG4','LT1','LP1','RC1','RPG7','RPG9','LSPL1','LC1','LPG5','LC2','RC2','LSPL2',\
+#                  'RSPL1','LPG6','RPG8','LIC3','B1','LIC2','RPG6','RPG2','LT2','LPG8','RPG10','RAG1','LAG1']
+Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
+LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
+LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
+threshold = st.slider('Threshold to Filter', 0.0, 1.0, 0.0)
+G, matrix1 = defineG(matrix, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNodesToStrengthen)
+if st.checkbox('Show matrix'):
+    st.write(matrix1)    
+closeness, betweenness, clustering, mean_clutering = centrality_calc(G,Nodes) 
 
-    matrix_order = matrix1.copy()
-    X = matrix_order.values
-    d = sch.distance.pdist(X)   
-    L = sch.linkage(d, method='complete')
-    ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
-    
-    with tab1:  
-        brainNX(G, matrix1.index)
-        st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
-        epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
-        SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2,RP1,RT1,RIC1,RT2,LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LIC1,LPG4,LT1,LP1,RC1,RPG7,RPG9,LSPL1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1,LPG5,LC2,RC2,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1,LPG6,RPG8,LIC3,B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2,RPG6)', '0.0, 0.0').split(',')).astype(float)
-        VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-        MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
-                           
-        init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
- 
-        if st.button('simulation'):
-            iterations = dynBrainNX(G,epsilon,init)
-            df = pd.DataFrame(iterations)
-            dff = df['status'].apply(lambda x: pd.Series(x))
-            dff.columns = matrix1.columns
-            st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
-            fig, ax = plt.subplots(figsize=(20, 10));
-            dff.plot(ax=ax).legend(loc='best')
-            st.pyplot(fig)
-            res = dff.T
-            res = res[res.columns[-1]]
-            st.table(res[res<-0.99].index)
-            st.table(res[res>0.99].index)        
-    with tab2:
-        m_tab2 = matrix1.copy()
-        columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
-        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
-        m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
-        plot_corr(m_tab2)        
-    with tab3:
-        m_tab3 = matrix1.copy()
-        columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
-        columns_L = [col for col in columns if col.lstrip()[0]=='L']
-        columns_R = [col for col in columns if col.lstrip()[0]!='L']
-        columns = columns_L + columns_R
-        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
-        m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
-        plot_corr(m_tab3)      
+tab1, tab2 = st.tabs(["Bar Chart", "Distribution Chart"])
+with tab1:
+    fig, ax = plt.subplots(figsize=(20, 4)); closeness.plot.bar(); ax.set_title('Closeness'); st.pyplot(fig)
+    fig, ax = plt.subplots(figsize=(20, 4)); betweenness.plot.bar(); ax.set_title('Betweenness'); st.pyplot(fig)
+    fig, ax = plt.subplots(figsize=(20, 4)); clustering.plot.bar(); ax.set_title('Clustering, average='+str(mean_clutering)); st.pyplot(fig)   
+with tab2:
+    fig, axes = plt.subplots(3, 1, figsize=(20, 15)); 
+    sns.distplot(closeness, kde=False, norm_hist=False, ax=axes[0]); axes[0].set_xlabel('Closeness'); axes[0].set_ylabel('Counts')
+    sns.distplot(betweenness, kde=False, norm_hist=False, ax=axes[1]); axes[1].set_xlabel('Betweenness'); axes[1].set_ylabel('Counts')
+    sns.distplot(clustering, kde=False, norm_hist=False, ax=axes[2]); axes[2].set_xlabel('Clustering Coefficient'); axes[2].set_ylabel('Counts'); 
+    axes[2].set_title('average path length is '+str(round(nx.average_shortest_path_length(G, weight='distance'),2))+'Clustering, average='+str(round(mean_clutering,4)))
+    st.pyplot(fig)    
+##################    
+#with col2: 
+tab1, tab2, tab3 = st.tabs(["Brain Network Chart", "Clustered CorrCoef Matrix", "Left/Right CorrCoef Matrix"])
+
+matrix_order = matrix1.copy()
+X = matrix_order.values
+d = sch.distance.pdist(X)   
+L = sch.linkage(d, method='complete')
+ind = sch.fcluster(L, 0.5*d.max(), 'distance')    
+
+with tab1:  
+    brainNX(G, matrix1.index)
+    st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
+    epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
+    SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2,RP1,RT1,RIC1,RT2,LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LIC1,LPG4,LT1,LP1,RC1,RPG7,RPG9,LSPL1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1,LPG5,LC2,RC2,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1,LPG6,RPG8,LIC3,B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2,RPG6)', '0.0, 0.0').split(',')).astype(float)
+    VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
+                       
+    init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
+
+    if st.button('simulation'):
+        iterations = dynBrainNX(G,epsilon,init)
+        df = pd.DataFrame(iterations)
+        dff = df['status'].apply(lambda x: pd.Series(x))
+        dff.columns = matrix1.columns
+        st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
+        fig, ax = plt.subplots(figsize=(20, 10));
+        dff.plot(ax=ax).legend(loc='best')
+        st.pyplot(fig)
+        res = dff.T
+        res = res[res.columns[-1]]
+        st.table(res[res<-0.99].index)
+        st.table(res[res>0.99].index)        
+with tab2:
+    m_tab2 = matrix1.copy()
+    columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
+    m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+    m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
+    plot_corr(m_tab2)        
+with tab3:
+    m_tab3 = matrix1.copy()
+    columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
+    columns_L = [col for col in columns if col.lstrip()[0]=='L']
+    columns_R = [col for col in columns if col.lstrip()[0]!='L']
+    columns = columns_L + columns_R
+    m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+    m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
+    plot_corr(m_tab3)      
