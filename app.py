@@ -25,7 +25,7 @@ def plot_corr(corr):
     st.pyplot(fig)  
 '''
 def plot_corr(corr):
-    fig, ax = plt.subplots(figsize=(20,20))
+    fig, ax = plt.subplots(figsize=(40,40))
     cax = ax.matshow(corr, cmap='Blues')
     
     # Increase font size for x-axis tick labels
