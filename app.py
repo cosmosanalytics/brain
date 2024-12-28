@@ -29,10 +29,10 @@ def plot_corr(corr):
     cax = ax.matshow(corr, cmap='Blues')
     
     # Increase font size for x-axis tick labels
-    plt.xticks(range(len(corr.columns)), corr.columns, rotation=90, fontsize=12)
+    plt.xticks(range(len(corr.columns)), corr.columns, rotation=90, fontsize=6)
     
     # Increase font size for y-axis tick labels
-    plt.yticks(range(len(corr.columns)), corr.columns, fontsize=12)
+    plt.yticks(range(len(corr.columns)), corr.columns, fontsize=6)
     
     cbar = fig.colorbar(cax, ticks=[-1, 0, 1], aspect=40, shrink=.8)
     st.pyplot(fig)
