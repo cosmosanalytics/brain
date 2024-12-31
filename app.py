@@ -180,8 +180,8 @@ with tab2:
     columns = [m_tab2.columns.tolist()[i] for i in list((np.argsort(ind)))]
     m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
     m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
-    if st.checkbox('Show matrix 2'):
-        st.write((m_tab2)    
+    #if st.checkbox('Show matrix 2'):
+    #    st.write((m_tab2)    
     plot_corr(m_tab2)        
 with tab3:
     m_tab3 = matrix1.copy()
@@ -191,6 +191,6 @@ with tab3:
     columns = columns_L + columns_R
     m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
     m_tab3 = m_tab3[columns]; m_tab3 = m_tab3.T; 
-    if st.checkbox('Show matrix 3'):
-        st.write((m_tab3)           
+    #if st.checkbox('Show matrix 3'):
+    #    st.write((m_tab3)           
     plot_corr(m_tab3)      
