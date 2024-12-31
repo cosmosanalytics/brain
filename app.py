@@ -181,8 +181,7 @@ with tab2:
     m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
     m_tab2 = m_tab2[columns]; m_tab2 = m_tab2.T; 
     plot_corr(m_tab2)
-    if st.checkbox('Show matrix 2'):
-        st.write((m_tab2)        
+    st.write((m_tab2)        
 with tab3:
     m_tab3 = matrix1.copy()
     columns = [m_tab3.columns.tolist()[i] for i in list((np.argsort(ind)))]        
