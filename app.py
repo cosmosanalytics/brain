@@ -113,10 +113,17 @@ matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()
 #with col1:
 ###################
 # Regions = st.multiselect('Select Region(s) to Focus', set(sublist), set(sublist))
-Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
-Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
+# Regions = st.multiselect('Select Region(s) to Focus', set(sublist), ['DMN'])
+# Regions_Nodes = refDF[refDF['sublist'].isin(Regions)]['lineList'].values
 # Regions_Nodes = ['RAG2','RP1','RT1','RIC1','RT2','LPG12','LIC1','LPG4','LT1','LP1','RC1','RPG7','RPG9','LSPL1','LC1','LPG5','LC2','RC2','LSPL2',\
 #                  'RSPL1','LPG6','RPG8','LIC3','B1','LIC2','RPG6','RPG2','LT2','LPG8','RPG10','RAG1','LAG1']
+Regions_Nodes = ['RPC1', 'RPC2', 'RPC3', 'RPC4', 'RPC5', 'LPC1', 'LPC2', 'LPC3', 'LPC4', 'RCGpd1', 'RCGpd2', 'LCGpd1', 'RAG1', 'RAG2', 'LAG1',\
+                 'RH1', 'RH2', 'LH1', \
+                 'RPG1', 'RPG2', 'RPG3', 'RPG4', 'RPG5', 'RPG6', 'RPG7', 'RPG8', 'RPG9', 'RPG10', 'RPG11', \
+                 'LPG1', 'LPG2', 'LPG3', 'LPG4', 'LPG5', 'LPG6', 'LPG7', 'LPG8', 'LPG9', 'LPG10', 'LPG11', 'LPG12', 'LPG13', 'LA1',\
+                 'RIC1', 'RIC2', 'LIC1', 'LIC2', 'LIC3', 'RCGad1', 'RCGad2', 'RCGad3', 'RCGad4', 'LCC1',\
+                 'RMFG1', 'RMFG2', 'RMFG3', 'RMFG4', 'LMFG1', 'LMFG2', 'LMFG3', 'LMFG4', 'RSPL1', 'LSPL1', 'LSPL2',\
+                 'RT1', 'RT2', 'LT1', 'LT2']
 Nodes = st.multiselect('Select Node(s) to Focus', Regions_Nodes, Regions_Nodes)
 LinkNodesToWeaken = st.multiselect('Select Links in between Node(s) to Weaken', Regions_Nodes)
 LinkNodesToStrengthen = st.multiselect('Select Links in between Node(s) to Strengthen', Regions_Nodes)
@@ -152,16 +159,25 @@ with tab1:
     brainNX(G, matrix1.index)
     st.write('The idea behind the WHK formulation is that the opinion of agent i at time t+1, will be given by the average opinion by its, selected, ϵ-neighbor.')
     epsilon = st.slider('epsilon-neighbor', 0.0, 1.0, 0.5)
-    SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2,RP1,RT1,RIC1,RT2,LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LIC1,LPG4,LT1,LP1,RC1,RPG7,RPG9,LSPL1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1,LPG5,LC2,RC2,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1,LPG6,RPG8,LIC3,B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2,RPG6)', '0.0, 0.0').split(',')).astype(float)
-    VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
+    # SM = pd.Series(st.text_input('SENSORIMOTOR NODES TO FOCUS: (RAG2,RP1,RT1,RIC1,RT2,LPG12)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    # DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (LIC1,LPG4,LT1,LP1,RC1,RPG7,RPG9,LSPL1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    # LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (LC1,LPG5,LC2,RC2,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    # VIS = pd.Series(st.text_input('VIS NODES TO FOCUS: (RSPL1,LPG6,RPG8,LIC3,B1)', '0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    # FP = pd.Series(st.text_input('FP NODES TO FOCUS: (LIC2,RPG6)', '0.0, 0.0').split(',')).astype(float)
+    # VA = pd.Series(st.text_input('VA NODES TO FOCUS: (RPG2,LT2,LPG8,RPG10)','0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    # MS = pd.Series(st.text_input('MISCELLANEOUS : (RAG1,LAG1)', '0.0, 0.0').split(',')).astype(float)
                        
-    init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
+    # init = pd.concat([SM, DMN, LIM, VIS, FP, VA, MS])
 
+    DMN = pd.Series(st.text_input('DEFAULT MODE NETWORK NODES TO FOCUS: (RPC1,RPC2,RPC3,RPC4,RPC5,LPC1,LPC2,LPC3,LPC4,RCGpd1,RCGpd2,LCGpd1,RAG1,RAG2,LAG1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    LIM = pd.Series(st.text_input('LIMBIC NODES TO FOCUS: (RH1,RH2,LH1,RPG1,RPG2,RPG3,RPG4,RPG5,RPG6,RPG7,RPG8,RPG9,RPG10,RPG11,LPG1,LPG2,LPG3,LPG4,LPG5,LPG6,LPG7,LPG8,LPG9,LPG10,LPG11,LPG12,LPG13,LA1)', \
+                                  '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    VA = pd.Series(st.text_input(' VA NODES TO FOCUS: (RIC1,RIC2,LIC1,LIC2,LIC3,RCGad1,RCGad2,RCGad3,RCGad4,LCC1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    FP = pd.Series(st.text_input('FP NODES TO FOCUS: (RMFG1,RMFG2,RMFG3,RMFG4,LMFG1,LMFG2,LMFG3,LMFG4,RSPL1,LSPL1,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+    SM = pd.Series(st.text_input('SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
+                       
+    init = pd.concat([DMN, LIM, VA, FP, MS])
+    
     if st.button('simulation'):
         iterations = dynBrainNX(G,epsilon,init)
         df = pd.DataFrame(iterations)
