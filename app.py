@@ -101,20 +101,21 @@ def dynBrainNX(g,epsilon,init):
     model.status = initial_statuses
     model.initial_status = initial_statuses    
     ####################
-    '''
+
     iterations = []
     for i in range(100):
+        '''
         if i in additional_states:
             # Update the model status with additional states
             for node, state in additional_states[i].items():
                 model.status[node] = state
-        
+        '''
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
         iterations.append(iteration_result) 
-    '''    
+  
     ###################    
-    iterations = model.iteration_bunch(100, node_status=True)
+    # iterations = model.iteration_bunch(100, node_status=True)
     return iterations
 
 matrix, colorlist, colornumbs, lineList, sublist, refDF = loadData()    
