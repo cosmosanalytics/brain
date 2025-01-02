@@ -172,6 +172,7 @@ with tab1:
     FP = pd.Series(st.text_input('FP NODES TO FOCUS: (RMFG1,RMFG2,RMFG3,RMFG4,LMFG1,LMFG2,LMFG3,LMFG4,RSPL1,LSPL1,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
     SM = pd.Series(st.text_input('SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)                       
     init = pd.concat([DMN, LIM, VA, FP, SM])
+    st.write('len of init'+str(len(init)))
 
     additional_states =  {
         10: {'1': 0.499},  # At iteration 10
@@ -182,6 +183,8 @@ with tab1:
         # iterations = dynBrainNX(G,epsilon,init)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
+        st.write(dff.columns)
+        st.write(matrix1.columns)
         dff.columns = matrix1.columns
         st.write(dff.T.style.background_gradient(axis=None, cmap='seismic'))
         # st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
