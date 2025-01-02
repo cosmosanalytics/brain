@@ -190,7 +190,7 @@ with tab1:
             return None    
 
     additional_states_input = st.text_input(
-        "Additional States {
+        """Additional States {
     'RPC1': 0, 'RPC2': 1, 'RPC3': 2, 'RPC4': 3, 'RPC5': 4, 
     'LPC1': 5, 'LPC2': 6, 'LPC3': 7, 'LPC4': 8, 
     'RCGpd1': 9, 'RCGpd2': 10, 'LCGpd1': 11, 
@@ -204,7 +204,7 @@ with tab1:
     'LMFG1': 57, 'LMFG2': 58, 'LMFG3': 59, 'LMFG4': 60, 
     'RSPL1': 61, 'LSPL1': 62, 'LSPL2': 63,
     'RT1': 64, 'RT2': 65, 'LT1': 66, 'LT2': 67
-}",
+}""",
         '{10: {1: 0.499},}',
         help="Enter additional states as a dictionary. Format: {iteration: {node: state, ...}, ...}"
     )
