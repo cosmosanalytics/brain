@@ -175,7 +175,7 @@ with tab1:
     st.write('len of init'+str(len(init)))
 
     additional_states =  {
-        10: {'1': 0.499},  # At iteration 10
+        10: {1: 0.499},  # At iteration 10
     }
 
     if st.button('simulation'):
