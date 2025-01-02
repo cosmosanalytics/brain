@@ -96,7 +96,7 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-def dynBrainNX(g,epsilon,init,add):
+def dynBrainNX(g,epsilon,init,additional_states):
     model = opn.WHKModel(g)
     config = mc.Configuration()
     config.add_model_parameter("epsilon", epsilon)
@@ -110,13 +110,14 @@ def dynBrainNX(g,epsilon,init,add):
     ####################
     iterations = []
     for i in range(100):
-        if i == 25:
+        if i in additional_states:
             # Update the model status with additional states
-            model.status = {node: i for node,i in zip(g.nodes(),add)}
+            for node, state in additional_states[i].items():
+                model.status[node] = state
         
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
-        iterations.append(iteration_result)  
+        iterations.append(iteration_result) 
     ###################    
     # iterations = model.iteration_bunch(100, node_status=True)
     return iterations
@@ -190,17 +191,12 @@ with tab1:
     SM = pd.Series(st.text_input('SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)                       
     init = pd.concat([DMN, LIM, VA, FP, SM])
 
-    addDMN = pd.Series(st.text_input('add DEFAULT MODE NETWORK NODES TO FOCUS: (RPC1,RPC2,RPC3,RPC4,RPC5,LPC1,LPC2,LPC3,LPC4,RCGpd1,RCGpd2,LCGpd1,RAG1,RAG2,LAG1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    addLIM = pd.Series(st.text_input('add LIMBIC NODES TO FOCUS: (RH1,RH2,LH1,RPG1,RPG2,RPG3,RPG4,RPG5,RPG6,RPG7,RPG8,RPG9,RPG10,RPG11,LPG1,LPG2,LPG3,LPG4,LPG5,LPG6,LPG7,LPG8,LPG9,LPG10,LPG11,LPG12,LPG13,LA1)', \
-                                  '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    addVA = pd.Series(st.text_input('add VA NODES TO FOCUS: (RIC1,RIC2,LIC1,LIC2,LIC3,RCGad1,RCGad2,RCGad3,RCGad4,LCC1)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    addFP = pd.Series(st.text_input('add FP NODES TO FOCUS: (RMFG1,RMFG2,RMFG3,RMFG4,LMFG1,LMFG2,LMFG3,LMFG4,RSPL1,LSPL1,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
-    addSM = pd.Series(st.text_input('add SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)                       
-    add = pd.concat([addDMN, addLIM, addVA, addFP, addSM])
-
+    additional_states =  {
+        10: {'LCC1': 0.499},  # At iteration 10
+    }
     
     if st.button('simulation'):
-        iterations = dynBrainNX(G,epsilon,init, add)
+        iterations = dynBrainNX(G,epsilon,init, additional_states)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
         dff.columns = matrix1.columns
