@@ -104,7 +104,8 @@ def dynBrainNX(g,epsilon,init,additional_states):
     for i in range(100):
         if i in additional_states:
             # Update the model status with additional states
-            # for node, state in additional_states[i].items():
+            for node, state in additional_states[i].items():
+                pass
             #     model.status[node] = state
             st.write(model.status)    
 
