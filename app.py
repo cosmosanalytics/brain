@@ -46,8 +46,6 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNod
     matrix = abs(matrix0); matrix[matrix<=threshold] = 0  
     matrix = matrix[matrix.index.isin(Regions_Nodes)][matrix.columns[matrix.columns.isin(Regions_Nodes)]]
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
-    # matrix.loc[matrix.index.isin(LinkNodesToWeaken), matrix.columns.isin(LinkNodesToWeaken)] = 0
-    # matrix.loc[matrix.index.isin(LinkNodesToStrengthen), matrix.columns.isin(LinkNodesToStrengthen)] = 0.5
     matrix.loc[matrix.index.isin(LinkNodesToWeaken), :] = 0.01;  matrix.loc[:, matrix.columns.isin(LinkNodesToWeaken)] = 0.01
     matrix.loc[matrix.index.isin(LinkNodesToStrengthen), :] = 0.499; matrix.loc[:, matrix.columns.isin(LinkNodesToStrengthen)] = 0.499
   
@@ -88,8 +86,8 @@ def brainNX(G, lineList):
             labels=Convert(lineList), font_color='black', alpha=0.7, font_size=9)
     st.pyplot(fig)
 
-# def dynBrainNX(g,epsilon,init,additional_states):
-def dynBrainNX(g,epsilon,init):
+def dynBrainNX(g,epsilon,init,additional_states):
+# def dynBrainNX(g,epsilon,init):
     model = opn.WHKModel(g)
     config = mc.Configuration()
     config.add_model_parameter("epsilon", epsilon)
@@ -104,12 +102,11 @@ def dynBrainNX(g,epsilon,init):
 
     iterations = []
     for i in range(100):
-        '''
         if i in additional_states:
             # Update the model status with additional states
             for node, state in additional_states[i].items():
                 model.status[node] = state
-        '''
+
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
         iterations.append(iteration_result) 
@@ -174,14 +171,14 @@ with tab1:
     FP = pd.Series(st.text_input('FP NODES TO FOCUS: (RMFG1,RMFG2,RMFG3,RMFG4,LMFG1,LMFG2,LMFG3,LMFG4,RSPL1,LSPL1,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
     SM = pd.Series(st.text_input('SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)                       
     init = pd.concat([DMN, LIM, VA, FP, SM])
-    '''
+
     additional_states =  {
         10: {'LCC1': 0.499},  # At iteration 10
     }
-    '''
+
     if st.button('simulation'):
-        # iterations = dynBrainNX(G,epsilon,init, additional_states)
-        iterations = dynBrainNX(G,epsilon,init)
+        iterations = dynBrainNX(G,epsilon,init, additional_states)
+        # iterations = dynBrainNX(G,epsilon,init)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
         dff.columns = matrix1.columns
