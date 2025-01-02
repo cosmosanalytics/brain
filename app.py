@@ -1,4 +1,5 @@
 import streamlit as st
+import ast
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -106,7 +107,6 @@ def dynBrainNX(g,epsilon,init,additional_states):
             # Update the model status with additional states
             for node, state in additional_states[i].items():
                 model.status[node] = state
-            st.write(model.status)    
 
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
@@ -172,19 +172,35 @@ with tab1:
     FP = pd.Series(st.text_input('FP NODES TO FOCUS: (RMFG1,RMFG2,RMFG3,RMFG4,LMFG1,LMFG2,LMFG3,LMFG4,RSPL1,LSPL1,LSPL2)', '0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0').split(',')).astype(float)
     SM = pd.Series(st.text_input('SM NODES TO FOCUS: (RT1,RT2,LT1,LT2)', '0.0, 0.0, 0.0, 0.0').split(',')).astype(float)                       
     init = pd.concat([DMN, LIM, VA, FP, SM])
-    st.write('len of init'+str(len(init)))
 
-    additional_states =  {
-        10: {1: 0.499},  # At iteration 10
-    }
+    def parse_additional_states(input_string):
+        try:
+            # Convert the input string to a dictionary
+            input_dict = ast.literal_eval(input_string)
+            
+            # Validate and convert the input
+            additional_states = {}
+            for iteration, states in input_dict.items():
+                iteration = int(iteration)
+                additional_states[iteration] = {int(node): float(state) for node, state in states.items()}
+            
+            return additional_states
+        except:
+            st.error("Invalid input format. Please check your input and try again.")
+            return None    
+
+    additional_states_input = st.text_input(
+        "Additional States",
+        '{10: {1: 0.499},}',
+        help="Enter additional states as a dictionary. Format: {iteration: {node: state, ...}, ...}"
+    )
+    additional_states = parse_additional_states(additional_states_input)
 
     if st.button('simulation'):
         iterations = dynBrainNX(G,epsilon,init, additional_states)
         # iterations = dynBrainNX(G,epsilon,init)
         df = pd.DataFrame(iterations)
         dff = df['status'].apply(lambda x: pd.Series(x))
-        st.write(dff.columns)
-        st.write(matrix1.columns)
         dff.columns = matrix1.columns
         st.write(dff.T.style.background_gradient(axis=None, cmap='seismic'))
         # st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
