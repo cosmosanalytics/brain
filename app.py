@@ -112,7 +112,7 @@ def dynBrainNX(g,epsilon,init,add):
     for i in range(100):
         if i == 25:
             # Update the model status with additional states
-            model.status = {node: i for node,i in zip(g.nodes(),add)
+            model.status = {node: i for node,i in zip(g.nodes(),add)}
         
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
