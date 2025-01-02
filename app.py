@@ -104,9 +104,9 @@ def dynBrainNX(g,epsilon,init,additional_states):
     for i in range(100):
         if i in additional_states:
             # Update the model status with additional states
-            st.write(model.status)
-            # for node, state in additional_states[i].items():
-            #     model.status[node] = state
+            for node, state in additional_states[i].items():
+                model.status[node] = state
+            st.write(model.status)    
 
         # Perform a single iteration
         iteration_result = model.iteration(node_status=True)
@@ -174,7 +174,7 @@ with tab1:
     init = pd.concat([DMN, LIM, VA, FP, SM])
 
     additional_states =  {
-        10: {'LCC1': 0.499},  # At iteration 10
+        10: {'0': 0.499},  # At iteration 10
     }
 
     if st.button('simulation'):
