@@ -174,7 +174,7 @@ with tab1:
     init = pd.concat([DMN, LIM, VA, FP, SM])
 
     additional_states =  {
-        10: {'0': 0.499},  # At iteration 10
+        10: {'1': 0.499},  # At iteration 10
     }
 
     if st.button('simulation'):
