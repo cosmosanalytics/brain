@@ -56,8 +56,8 @@ def defineG(matrix0, threshold, Regions_Nodes, Nodes, LinkNodesToWeaken, LinkNod
     matrix = matrix[matrix.index.isin(Nodes)][matrix.columns[matrix.columns.isin(Nodes)]]
     # matrix.loc[matrix.index.isin(LinkNodesToWeaken), matrix.columns.isin(LinkNodesToWeaken)] = 0
     # matrix.loc[matrix.index.isin(LinkNodesToStrengthen), matrix.columns.isin(LinkNodesToStrengthen)] = 0.5
-    matrix.loc[matrix.index.isin(LinkNodesToWeaken), :] = 0;  matrix.loc[:, matrix.columns.isin(LinkNodesToWeaken)] = 0
-    matrix.loc[matrix.index.isin(LinkNodesToStrengthen), :] = 0.5; matrix.loc[:, matrix.columns.isin(LinkNodesToStrengthen)] = 0.5
+    matrix.loc[matrix.index.isin(LinkNodesToWeaken), :] = 0.01;  matrix.loc[:, matrix.columns.isin(LinkNodesToWeaken)] = 0.01
+    matrix.loc[matrix.index.isin(LinkNodesToStrengthen), :] = 0.499; matrix.loc[:, matrix.columns.isin(LinkNodesToStrengthen)] = 0.499
   
     np.fill_diagonal(matrix.values, 0)
     matrix = matrix.loc[Regions_Nodes,Regions_Nodes]
