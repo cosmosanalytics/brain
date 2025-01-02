@@ -190,7 +190,21 @@ with tab1:
             return None    
 
     additional_states_input = st.text_input(
-        "Additional States",
+        "Additional States {
+    'RPC1': 0, 'RPC2': 1, 'RPC3': 2, 'RPC4': 3, 'RPC5': 4, 
+    'LPC1': 5, 'LPC2': 6, 'LPC3': 7, 'LPC4': 8, 
+    'RCGpd1': 9, 'RCGpd2': 10, 'LCGpd1': 11, 
+    'RAG1': 12, 'RAG2': 13, 'LAG1': 14,
+    'RH1': 15, 'RH2': 16, 'LH1': 17,
+    'RPG1': 18, 'RPG2': 19, 'RPG3': 20, 'RPG4': 21, 'RPG5': 22, 'RPG6': 23, 'RPG7': 24, 'RPG8': 25, 'RPG9': 26, 'RPG10': 27, 'RPG11': 28,
+    'LPG1': 29, 'LPG2': 30, 'LPG3': 31, 'LPG4': 32, 'LPG5': 33, 'LPG6': 34, 'LPG7': 35, 'LPG8': 36, 'LPG9': 37, 'LPG10': 38, 'LPG11': 39, 'LPG12': 40, 'LPG13': 41, 'LA1': 42,
+    'RIC1': 43, 'RIC2': 44, 'LIC1': 45, 'LIC2': 46, 'LIC3': 47, 
+    'RCGad1': 48, 'RCGad2': 49, 'RCGad3': 50, 'RCGad4': 51, 'LCC1': 52,
+    'RMFG1': 53, 'RMFG2': 54, 'RMFG3': 55, 'RMFG4': 56, 
+    'LMFG1': 57, 'LMFG2': 58, 'LMFG3': 59, 'LMFG4': 60, 
+    'RSPL1': 61, 'LSPL1': 62, 'LSPL2': 63,
+    'RT1': 64, 'RT2': 65, 'LT1': 66, 'LT2': 67
+}",
         '{10: {1: 0.499},}',
         help="Enter additional states as a dictionary. Format: {iteration: {node: state, ...}, ...}"
     )
