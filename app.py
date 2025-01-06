@@ -220,6 +220,7 @@ with tab1:
         # st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
         fig, ax = plt.subplots(figsize=(20, 10));
         dff.plot(ax=ax).legend(loc='best')
+        ax.set_ylim(bottom=-1, top=1)
         st.pyplot(fig)
         res = dff.T
         res = res[res.columns[-1]]
