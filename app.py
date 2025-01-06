@@ -219,7 +219,12 @@ with tab1:
         st.write(dff.T.style.background_gradient(axis=None, cmap='seismic'))
         # st.table(dff.T.style.background_gradient(axis=None, cmap='seismic'))
         fig, ax = plt.subplots(figsize=(20, 10));
-        dff.plot(ax=ax).legend(loc='best')
+        dff.plot(ax=ax)#.legend(loc='best')
+
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize='small', ncol=2)
+        
         ax.set_ylim(bottom=-1, top=1)
         st.pyplot(fig)
         res = dff.T
